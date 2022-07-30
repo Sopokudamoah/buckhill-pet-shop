@@ -24,6 +24,6 @@ trait HasUuid
      * @return Model|null
      */
     public function findByUuid($uuid) {
-        return $this->firstWhere($this->uuid_column, '=', $uuid);
+        return $this->where($this->uuid_column, '=', $uuid)->firstOrFail();
     }
 }

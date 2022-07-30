@@ -24,11 +24,12 @@ trait HasUuid
 
     /**
      * @param $uuid
+     * @param string[] $columns
      * @return Model|null
      */
-    public static function findByUuid($uuid) {
+    public static function findByUuid($uuid, array $columns = ['*']) {
         $instance = new static();
-        return $instance->where($instance->uuid_column, '=', $uuid)->firstOrFail();
+        return $instance->where($instance->uuid_column, '=', $uuid)->firstOrFail($columns);
     }
 
     /**

@@ -51,7 +51,6 @@ class GenerateJWTSecret extends KeyGenerateCommand
         $escaped = preg_quote('='.$this->laravel['config']['jwt.secret'], '/');
 
         return "/^$this->env_key{$escaped}/m";
-
     }
 
     /**
@@ -85,5 +84,4 @@ class GenerateJWTSecret extends KeyGenerateCommand
             file_get_contents($this->laravel->environmentFilePath())
         ));
     }
-
 }

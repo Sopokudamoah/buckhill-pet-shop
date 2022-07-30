@@ -16,7 +16,8 @@ trait HasUuid
     /**
      * @return void
      */
-    public static function bootHasUuid() {
+    public static function bootHasUuid()
+    {
         static::creating(function ($model) {
             $model->{$model->uuid_column} = Uuid::uuid4()->toString();
         });
@@ -27,7 +28,8 @@ trait HasUuid
      * @param string[] $columns
      * @return Model|null
      */
-    public static function findByUuid($uuid, array $columns = ['*']) {
+    public static function findByUuid($uuid, array $columns = ['*'])
+    {
         $instance = new static();
         return $instance->where($instance->uuid_column, '=', $uuid)->firstOrFail($columns);
     }
@@ -37,7 +39,8 @@ trait HasUuid
      *
      * @return mixed|string
      */
-    public function getRouteKeyName() {
+    public function getRouteKeyName()
+    {
         return $this->uuid_column;
     }
 }

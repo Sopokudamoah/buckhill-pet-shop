@@ -11,7 +11,8 @@ use Firebase\JWT\SignatureInvalidException;
  * @param string $algo
  * @return string
  */
-function jwt_encode(array $payload, string $algo = 'HS256') {
+function jwt_encode(array $payload, string $algo = 'HS256')
+{
     $now = now();
     $domain_name = request()->getSchemeAndHttpHost();
 
@@ -34,6 +35,7 @@ function jwt_encode(array $payload, string $algo = 'HS256') {
  * @return array
  * @throws SignatureInvalidException|ExpiredException
  */
-function jwt_decode(string $jwt, string $algo = 'HS256') {
+function jwt_decode(string $jwt, string $algo = 'HS256')
+{
     return (array) JWT::decode($jwt, new Key(config('jwt.secret'), $algo));
 }

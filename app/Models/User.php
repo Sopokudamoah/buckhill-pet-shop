@@ -9,7 +9,9 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, HasUuid;
+    use HasFactory;
+    use Notifiable;
+    use HasUuid;
 
     /**
      * The attributes that are mass assignable.
@@ -40,4 +42,10 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+
+    public function jwtTokens()
+    {
+        return $this->hasMany(JwtToken::class);
+    }
 }

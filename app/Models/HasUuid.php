@@ -23,7 +23,8 @@ trait HasUuid
      * @param $uuid
      * @return Model|null
      */
-    public function findByUuid($uuid) {
-        return $this->where($this->uuid_column, '=', $uuid)->firstOrFail();
+    public static function findByUuid($uuid) {
+        $instance = new static();
+        return static::newModelInstance()->where($instance->uuid_column, '=', $uuid)->firstOrFail();
     }
 }

@@ -13,6 +13,9 @@ trait HasUuid
     protected string $uuid_column = 'uuid';
 
 
+    /**
+     * @return void
+     */
     public static function bootHasUuid() {
         static::creating(function ($model) {
             $model->{$model->uuid_column} = Uuid::uuid4()->toString();
@@ -25,6 +28,15 @@ trait HasUuid
      */
     public static function findByUuid($uuid) {
         $instance = new static();
-        return static::newModelInstance()->where($instance->uuid_column, '=', $uuid)->firstOrFail();
+        return $instance->where($instance->uuid_column, '=', $uuid)->firstOrFail();
+    }
+
+    /**
+     *  Use uuid column for route resolver
+     *
+     * @return mixed|string
+     */
+    public function getRouteKeyName() {
+        return $this->uuid_column;
     }
 }

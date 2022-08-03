@@ -2,103 +2,37 @@
 
 namespace App\Guards;
 
-use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Contracts\Auth\Guard;
-use Illuminate\Contracts\Auth\UserProvider;
+use App\Models\User;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  *
  */
-class JwtAuthGuard implements Guard
+class JwtAuthGuard
 {
+    private string $token;
 
-    /**
-     * @var UserProvider|null
-     */
-    private ?UserProvider $provider;
-    /**
-     * @var Authenticatable|null
-     */
-    private ?Authenticatable $user;
+    public static $user_key = 'user_uuid';
 
-    /**
-     * @param UserProvider|null $provider
-     */
-    public function __construct(?UserProvider $provider)
+    public function __construct(string $token)
     {
-        $this->provider = $provider;
+        $this->token = $token;
     }
 
+
     /**
-     * @return bool
+     * @return Model|null
      */
-    public function check()
+    public function getUserFromToken()
     {
-        return isset($this->user);
+        $payload = jwt_decode($this->token);
+
+        return User::findByUuid($payload[self::$user_key]);
     }
 
-    /**
-     * @return bool
-     */
-    public function guest()
+
+    private function isValidPayload(array $payload)
     {
-        return !isset($this->user);
-    }
-
-    /**
-     * @return Authenticatable|null
-     */
-    public function user()
-    {
-        return $this->user;
-    }
-
-    /**
-     * @return int|mixed|string|null
-     */
-    public function id()
-    {
-        return $this->user->getAuthIdentifier();
-    }
-
-    /**
-     * @param array $credentials
-     * @return bool
-     */
-    public function validate(array $credentials = [])
-    {
-        if (empty($credentials['username']) || empty($credentials['password'])) {
-            return false;
-        }
-
-        $user = $this->provider->retrieveById($credentials['username']);
-
-        if (!isset($user)) {
-            return false;
-        }
-
-        if ($this->provider->validateCredentials($user, $credentials)) {
-            $this->setUser($user);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * @param Authenticatable $user
-     * @return void
-     */
-    public function setUser(Authenticatable $user)
-    {
-        $this->user = $user;
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasUser()
-    {
-        return $this->check();
+        return isset($payload[self::$user_key]);
     }
 }

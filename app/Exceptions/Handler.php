@@ -55,6 +55,7 @@ class Handler extends ExceptionHandler
         if ($e instanceof ValidationException && $request->expectsJson()) {
             return (new BaseApiResource())->errors($e->validator->getMessageBag()->toArray())
                 ->message($e->getMessage())
+                ->success(0)
                 ->response()
                 ->setStatusCode($e->status);
         }

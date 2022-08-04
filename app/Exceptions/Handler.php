@@ -2,7 +2,9 @@
 
 namespace App\Exceptions;
 
+use App\Http\Resources\V1\BaseApiResource;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Validation\ValidationException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -46,5 +48,17 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+    }
+
+    public function render($request, Throwable $e)
+    {
+        if ($e instanceof ValidationException && $request->expectsJson()) {
+            return (new BaseApiResource())->errors($e->validator->getMessageBag()->toArray())
+                ->message($e->getMessage())
+                ->response()
+                ->setStatusCode($e->status);
+        }
+
+        return parent::render($request, $e);
     }
 }

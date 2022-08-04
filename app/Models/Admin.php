@@ -11,6 +11,8 @@ class Admin extends User
 
     protected $table = 'users';
 
+    protected $attributes = ['is_admin' => 1];
+
     protected static function booted()
     {
         static::addGlobalScope(new AdminScope());

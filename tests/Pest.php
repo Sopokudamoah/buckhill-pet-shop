@@ -28,6 +28,14 @@ expect()->extend('toBeOne', function () {
     return $this->toBe(1);
 });
 
+beforeEach(function () {
+    DB::beginTransaction();
+});
+
+afterEach(function () {
+    DB::rollBack();
+});
+
 /*
 |--------------------------------------------------------------------------
 | Functions
@@ -39,7 +47,7 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something()
+function apiTest()
 {
-    // ..
+    return test()->withHeaders(['accept' => 'application/json']);
 }

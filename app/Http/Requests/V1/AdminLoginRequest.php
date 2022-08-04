@@ -3,6 +3,7 @@
 namespace App\Http\Requests\V1;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class AdminLoginRequest extends FormRequest
 {
@@ -25,7 +26,7 @@ class AdminLoginRequest extends FormRequest
     public function rules()
     {
         return [
-            'email' => 'required|email|exists:App\Models\Admin,email',
+            'email' => ['required', 'email', Rule::exists('users', 'email')->where('is_admin', 1)],
             'password' => 'required'
         ];
     }

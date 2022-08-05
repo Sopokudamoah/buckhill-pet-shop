@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Scopes\AdminScope;
 use App\Models\Traits\HasUuid;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -55,6 +56,12 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    protected static function booted()
+    {
+        static::addGlobalScope(new AdminScope());
+
+        parent::booted();
+    }
 
     public function jwtTokens()
     {

@@ -2,6 +2,7 @@
 
 namespace App\Models\Scopes;
 
+use App\Models\Admin;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
@@ -17,6 +18,7 @@ class AdminScope implements Scope
      */
     public function apply(Builder $builder, Model $model)
     {
-        $builder->where('is_admin', '=', 1);
+        $is_admin = $model instanceof Admin ? 1 : 0;
+        $builder->where('is_admin', '=', $is_admin);
     }
 }

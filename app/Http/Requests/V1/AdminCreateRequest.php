@@ -25,16 +25,58 @@ class AdminCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'is_admin' => 'required',
-            'email' => 'required',
-            'email_verified_at' => 'required',
-            'password' => 'required',
-            'avatar' => 'required',
+            'first_name' => 'required|string',
+            'last_name' => 'required|string',
+            'email' => 'required|unique:users|',
+            'password' => 'required|confirmed',
+            'password_confirmation' => 'required|same:password',
+            'avatar' => 'required|uuid',
             'address' => 'required',
             'phone_number' => 'required',
-            'is_marketing' => 'required',
+            'is_marketing' => 'required|bool',
+        ];
+    }
+
+    public function bodyParameters()
+    {
+        $password = fake()->password();
+        return [
+            'first_name' => [
+                'description' => 'User\'s first name',
+                'example' => fake()->firstName()
+            ],
+            'last_name' => [
+                'description' => 'User\'s last name',
+                'example' => fake()->lastName()
+            ],
+            'email' => [
+                'description' => 'User\'s email',
+                'example' => fake()->safeEmail()
+            ],
+            'password' => [
+                'description' => 'A strong password',
+                'example' => $password
+            ],
+            'password_confirmation' => [
+                'description' => 'Confirm password',
+                'example' => $password
+            ],
+            'avatar' => [
+                'description' => 'Avatar image UUID',
+                'example' => fake()->uuid()
+            ],
+            'address' => [
+                'description' => 'User\'s address',
+                'example' => fake()->address()
+            ],
+            'phone_number' => [
+                'description' => 'User\'s phone number',
+                'example' => fake()->e164PhoneNumber()
+            ],
+            'is_marketing' => [
+                'description' => 'Is marketing',
+                'example' => fake()->randomElement(['0', '1'])
+            ],
         ];
     }
 }

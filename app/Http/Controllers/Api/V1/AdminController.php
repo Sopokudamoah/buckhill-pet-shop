@@ -12,7 +12,6 @@ use App\Models\Admin;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 
 /**
@@ -88,17 +87,11 @@ class AdminController extends Controller
     {
         $data = $request->validated();
 
-        try {
-            $data['password'] = bcrypt($data['password']);
-            $user = Admin::create($data);
-            return (new BaseApiResource(
-                $user->only(['first_name', 'last_name', 'email', 'avatar', 'phone_number', 'id'])
-            ))->message("User created successfully");
-        } catch (\Exception $e) {
-            Log::error($e->getMessage(), $e->getTrace());
-            return (new BaseApiResource())->message("Something went wrong on the server")->success(0)->response(
-            )->setStatusCode(500);
-        }
+        $data['password'] = bcrypt($data['password']);
+        $user = Admin::create($data);
+        return (new BaseApiResource(
+            $user->only(['first_name', 'last_name', 'email', 'avatar', 'phone_number', 'id'])
+        ))->message("User created successfully");
     }
 
 

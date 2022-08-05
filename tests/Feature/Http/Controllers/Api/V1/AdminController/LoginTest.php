@@ -9,7 +9,7 @@ test('admin can log in with correct credentials', function () {
     $this->assertModelExists($admin);
     $this->assertNull($admin->last_login_at);
 
-    $response = apiTest()->post(route('api.v1.admin.login', ['email' => $admin->email, 'password' => $password]));
+    $response = apiTest()->post(route('api.v1.admin.login'), ['email' => $admin->email, 'password' => $password]);
 
     $response->assertStatus(200);
     $response->assertJsonStructure(['success', 'message', 'data']);
@@ -27,7 +27,7 @@ test('admin cannot log in with incorrect credentials', function () {
 
     $this->assertModelExists($admin);
 
-    $response = apiTest()->post(route('api.v1.admin.login', ['email' => $admin->email, 'password' => Str::random(10)]));
+    $response = apiTest()->post(route('api.v1.admin.login'), ['email' => $admin->email, 'password' => Str::random(10)]);
 
     $response->assertStatus(422);
     $response->assertSee("Invalid login credentials");
@@ -43,7 +43,7 @@ test('user cannot log in as an admin', function () {
 
     $this->assertModelExists($user);
 
-    $response = apiTest()->post(route('api.v1.admin.login', ['email' => $user->email, 'password' => $password]));
+    $response = apiTest()->post(route('api.v1.admin.login'), ['email' => $user->email, 'password' => $password]);
 
     $response->assertStatus(422);
     $response->assertJsonStructure(['success', 'message', 'data']);

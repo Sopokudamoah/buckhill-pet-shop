@@ -10,9 +10,9 @@ test('admin can create admin account', function () {
     $user->password_confirmation = $user->password;
 
     $response = apiTest()->withToken($token)->post(
-        route(
-            'api.v1.admin.create',
-            $user->only([
+        route('api.v1.admin.create'),
+        $user->only(
+            [
                 'first_name',
                 'last_name',
                 'email',
@@ -22,7 +22,7 @@ test('admin can create admin account', function () {
                 'address',
                 'phone_number',
                 'is_marketing',
-            ])
+            ]
         )
     );
 
@@ -41,20 +41,18 @@ test('admin cannot create admin account with invalid data', function () {
     $user->password_confirmation = fake()->password();
 
     $response = apiTest()->withToken($token)->post(
-        route(
-            'api.v1.admin.create',
-            $user->only([
-                'first_name',
-                'last_name',
-                'email',
-                'password',
-                'password_confirmation',
-                'avatar',
-                'address',
-                'phone_number',
-                'is_marketing',
-            ])
-        )
+        route('api.v1.admin.create'),
+        $user->only([
+            'first_name',
+            'last_name',
+            'email',
+            'password',
+            'password_confirmation',
+            'avatar',
+            'address',
+            'phone_number',
+            'is_marketing',
+        ])
     );
 
     $response->assertStatus(422);

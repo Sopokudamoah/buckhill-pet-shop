@@ -1,0 +1,1 @@
+{"success":0,"message":"The password confirmation does not match. (and 1 more error)","data":[],"errors":{"password":["The password confirmation does not match."],"password_confirmation":["The password confirmation and password must match."]}}

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Events\UserLoggedIn;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\AdminCreateRequest;
 use App\Http\Requests\V1\AdminLoginRequest;
 use App\Http\Resources\V1\AdminLoginResource;
 use App\Http\Resources\V1\BaseApiResource;
@@ -11,6 +12,7 @@ use App\Models\Admin;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 
 /**
@@ -74,8 +76,29 @@ class AdminController extends Controller
         return (new BaseApiResource())->message("Admin logged out");
     }
 
-    public function create(Request $request)
+    /**
+     * Create an admin account
+     *
+     * @authenticated
+     *
+     * @responseFile status=200 storage/responses/admin-user-create-200.json
+     * @responseFile status=422 scenario="when validation fails" storage/responses/admin-user-create-422.json
+     */
+    public function create(AdminCreateRequest $request)
     {
+        $data = $request->validated();
+
+        try {
+            $data['password'] = bcrypt($data['password']);
+            $user = Admin::create($data);
+            return (new BaseApiResource(
+                $user->only(['first_name', 'last_name', 'email', 'avatar', 'phone_number', 'id'])
+            ))->message("User created successfully");
+        } catch (\Exception $e) {
+            Log::error($e->getMessage(), $e->getTrace());
+            return (new BaseApiResource())->message("Something went wrong on the server")->success(0)->response(
+            )->setStatusCode(500);
+        }
     }
 
 

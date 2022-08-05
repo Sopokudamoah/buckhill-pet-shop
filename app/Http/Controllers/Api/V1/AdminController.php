@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\AdminLoginRequest;
 use App\Http\Resources\V1\AdminLoginResource;
+use App\Http\Resources\V1\BaseApiResource;
 use App\Models\Admin;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -43,8 +44,17 @@ class AdminController extends Controller
         throw ValidationException::withMessages(['email' => 'Invalid login credentials']);
     }
 
+    /**
+     * @param Request $request
+     * @return BaseApiResource
+     */
     public function logout(Request $request)
     {
+        //TODO: Re-write for JWT implementation
+        $token = $request->user()->currentAccessToken();
+        $token->delete();
+
+        return (new BaseApiResource())->message("Admin logged out");
     }
 
     public function userListing(Request $request)

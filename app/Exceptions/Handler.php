@@ -5,6 +5,7 @@ namespace App\Exceptions;
 use App\Http\Resources\V1\BaseApiResource;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Validation\ValidationException;
+use Spatie\QueryBuilder\Exceptions\InvalidFilterQuery;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -58,6 +59,15 @@ class Handler extends ExceptionHandler
                 ->success(0)
                 ->response()
                 ->setStatusCode($e->status);
+        }
+
+        if ($e instanceof InvalidFilterQuery) {
+            return (new BaseApiResource())
+                ->errors([$e->getMessage()])
+                ->message($e->getMessage())
+                ->success(0)
+                ->response()
+                ->setStatusCode($e->getStatusCode());
         }
 
         return parent::render($request, $e);

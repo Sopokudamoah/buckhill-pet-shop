@@ -13,11 +13,25 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
+/**
+ * @group Admin
+ *
+ *
+ * This API endpoint will allow to create a new admin account, login and logout an admin account, as well it will enable the following features:
+ * - All users listing (non-admins)
+ * - Edit and Delete user’s accounts
+ * - Admins accounts cannot be deleted or edited
+ */
 class AdminController extends Controller
 {
     /**
-     * @param AdminLoginRequest $request
-     * @return AdminLoginResource
+     * Login an admin account
+     *
+     * @unauthenticated
+     *
+     * @responseFile status=200 scenario="when authenticated as admin" storage/responses/admin-login-200.json
+     * @responseFile status=422 scenario="when credentials are invalid as admin" storage/responses/admin-login-422.json
+     * @responseFile status=422 scenario="when not an admin" storage/responses/user-admin-login-422.json
      */
     public function login(AdminLoginRequest $request)
     {
@@ -44,8 +58,12 @@ class AdminController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @return BaseApiResource
+     * Logout an admin account
+     *
+     * @authenticated
+     *
+     * @responseFile status=200 scenario="when authenticated as admin" storage/responses/admin-logout-200.json
+     * @responseFile status=401 scenario="when unauthenticated as admin" storage/responses/admin-logout-401.json
      */
     public function logout(Request $request)
     {

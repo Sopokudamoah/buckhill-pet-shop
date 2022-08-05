@@ -7,11 +7,15 @@ test('admin can log in with correct credentials', function () {
     $admin = User::factory()->create(['is_admin' => 1, 'password' => bcrypt($password)]);
 
     $this->assertModelExists($admin);
+    $this->assertNull($admin->last_login_at);
 
     $response = apiTest()->post(route('api.v1.admin.login', ['email' => $admin->email, 'password' => $password]));
 
     $response->assertStatus(200);
     $response->assertJsonStructure(['success', 'message', 'data']);
+
+    $admin->refresh();
+    $this->assertNotNull($admin->last_login_at);
 });
 
 

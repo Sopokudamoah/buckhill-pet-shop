@@ -102,4 +102,11 @@ class BaseApiResource extends JsonResource
         $this->errors = $errors;
         return $this;
     }
+
+
+    public function resource($resource)
+    {
+        $this->resource = $resource;
+        return $this;
+    }
 }

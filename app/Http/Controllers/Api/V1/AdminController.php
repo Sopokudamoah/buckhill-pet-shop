@@ -6,13 +6,16 @@ use App\Events\UserLoggedIn;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\AdminCreateRequest;
 use App\Http\Requests\V1\AdminLoginRequest;
+use App\Http\Requests\V1\UserListingRequest;
 use App\Http\Resources\V1\AdminLoginResource;
 use App\Http\Resources\V1\BaseApiResource;
+use App\Http\Resources\V1\UserResource;
 use App\Models\Admin;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
+use Spatie\QueryBuilder\QueryBuilder;
 
 /**
  * @group Admin
@@ -95,8 +98,22 @@ class AdminController extends Controller
     }
 
 
-    public function userListing(Request $request)
+    /**
+     * List all users
+     *
+     * @authenticated
+     *
+     * @responseFile status=200 storage/responses/admin-user-listing-200.json
+     * @responseFile status=400 scenario="when filtered by disallowed field" storage/responses/admin-user-listing-400.json
+     */
+    public function userListing(UserListingRequest $request)
     {
+        $users = QueryBuilder::for(User::query())
+            ->select(['first_name', 'last_name', 'email', 'avatar', 'phone_number', 'id'])
+            ->allowedFilters(['first_name', 'last_name','email', 'phone_number'])
+            ->simplePaginate($request->get('per_page', 15));
+
+        return (new UserResource())->resource($users);
     }
 
     public function userEdit(Request $request, User $user)

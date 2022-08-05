@@ -37,6 +37,9 @@ class AdminCreateRequest extends FormRequest
         ];
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function bodyParameters()
     {
         $password = fake()->password();

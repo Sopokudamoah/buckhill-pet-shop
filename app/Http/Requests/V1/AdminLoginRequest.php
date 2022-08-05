@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\V1;
 
-use Faker\Factory;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -32,18 +31,20 @@ class AdminLoginRequest extends FormRequest
         ];
     }
 
+
+    /**
+     * @codeCoverageIgnore
+     */
     public function bodyParameters()
     {
-        $faker = Factory::create();
-
         return [
             'email' => [
                 'description' => 'A valid email of admin user',
-                'example' => $faker->safeEmail()
+                'example' => fake()->safeEmail()
             ],
             'password' => [
                 'description' => 'Password of admin user',
-                'example' => $faker->password(8, 10),
+                'example' => fake()->password(8, 10),
             ]
         ];
     }

@@ -16,3 +16,6 @@ yarn-error.log
 /.vscode
 /public/docs/
 .scribe
+.env.testing
+.test-results
+test.sh

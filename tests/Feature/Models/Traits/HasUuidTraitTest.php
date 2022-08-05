@@ -14,3 +14,11 @@ test('uuid generated when model is created', function () {
 
     $this->assertNotNull($user->uuid);
 });
+
+
+test('can find model by uuid', function () {
+    $user = User::factory()->create();
+
+    $model = User::findByUuid($user->uuid);
+    $this->assertModelExists($model);
+});

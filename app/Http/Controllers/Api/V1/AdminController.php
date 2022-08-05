@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Events\UserLoggedIn;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\AdminLoginRequest;
 use App\Http\Resources\V1\AdminLoginResource;
@@ -14,10 +15,6 @@ use Illuminate\Validation\ValidationException;
 
 class AdminController extends Controller
 {
-    public function create(Request $request)
-    {
-    }
-
     /**
      * @param AdminLoginRequest $request
      * @return AdminLoginResource
@@ -32,6 +29,8 @@ class AdminController extends Controller
 
             // TODO: Change implementation from Sanctum to JWT
             $token = $admin->createToken($admin->full_name)->plainTextToken;
+
+            UserLoggedIn::dispatch($admin);
 
             return (new AdminLoginResource())->data(
                 [
@@ -56,6 +55,11 @@ class AdminController extends Controller
 
         return (new BaseApiResource())->message("Admin logged out");
     }
+
+    public function create(Request $request)
+    {
+    }
+
 
     public function userListing(Request $request)
     {

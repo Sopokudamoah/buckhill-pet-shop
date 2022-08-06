@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use App\Http\Resources\V1\BaseApiResource;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Validation\ValidationException;
 use Psr\Log\LogLevel;
@@ -80,6 +81,16 @@ class Handler extends ExceptionHandler
                     ->success(0)
                     ->response()
                     ->setStatusCode(403);
+            }
+
+            if ($e instanceof ModelNotFoundException) {
+                $message = "No results found for requested query";
+                return (new BaseApiResource())
+                    ->errors([$message])
+                    ->message($message)
+                    ->success(0)
+                    ->response()
+                    ->setStatusCode(404);
             }
         }
 

@@ -19,3 +19,4 @@ yarn-error.log
 .env.testing
 .test-results
 test.sh
+*.DS_Store

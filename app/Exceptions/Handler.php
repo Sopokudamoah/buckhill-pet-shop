@@ -3,8 +3,10 @@
 namespace App\Exceptions;
 
 use App\Http\Resources\V1\BaseApiResource;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Validation\ValidationException;
+use Psr\Log\LogLevel;
 use Spatie\QueryBuilder\Exceptions\InvalidFilterQuery;
 use Throwable;
 
@@ -13,7 +15,7 @@ class Handler extends ExceptionHandler
     /**
      * A list of exception types with their corresponding custom log levels.
      *
-     * @var array<class-string<\Throwable>, \Psr\Log\LogLevel::*>
+     * @var array<class-string<\Throwable>, LogLevel::*>
      */
     protected $levels = [
         //
@@ -53,21 +55,32 @@ class Handler extends ExceptionHandler
 
     public function render($request, Throwable $e)
     {
-        if ($e instanceof ValidationException && $request->expectsJson()) {
-            return (new BaseApiResource())->errors($e->validator->getMessageBag()->toArray())
-                ->message($e->getMessage())
-                ->success(0)
-                ->response()
-                ->setStatusCode($e->status);
-        }
+        if ($request->expectsJson()) {
+            if ($e instanceof ValidationException) {
+                return (new BaseApiResource())->errors($e->validator->getMessageBag()->toArray())
+                    ->message($e->getMessage())
+                    ->success(0)
+                    ->response()
+                    ->setStatusCode($e->status);
+            }
 
-        if ($e instanceof InvalidFilterQuery) {
-            return (new BaseApiResource())
-                ->errors([$e->getMessage()])
-                ->message($e->getMessage())
-                ->success(0)
-                ->response()
-                ->setStatusCode($e->getStatusCode());
+            if ($e instanceof InvalidFilterQuery) {
+                return (new BaseApiResource())
+                    ->errors([$e->getMessage()])
+                    ->message($e->getMessage())
+                    ->success(0)
+                    ->response()
+                    ->setStatusCode($e->getStatusCode());
+            }
+
+            if ($e instanceof AuthorizationException) {
+                return (new BaseApiResource())
+                    ->errors([$e->getMessage()])
+                    ->message($e->getMessage())
+                    ->success(0)
+                    ->response()
+                    ->setStatusCode(403);
+            }
         }
 
         return parent::render($request, $e);

@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Requests\V1;
+namespace App\Http\Requests\Admin\V1;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class AdminCreateRequest extends FormRequest
+class AdminUserEditRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +14,8 @@ class AdminCreateRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        $user = $this->route('user');
+        return !$user->is_admin;
     }
 
 
@@ -24,16 +26,25 @@ class AdminCreateRequest extends FormRequest
      */
     public function rules()
     {
+        $user = $this->route('user');
         return [
-            'first_name' => 'required|string',
-            'last_name' => 'required|string',
-            'email' => 'required|unique:users|',
-            'password' => 'required|confirmed',
-            'password_confirmation' => 'required|same:password',
-            'avatar' => 'required|uuid',
-            'address' => 'required',
-            'phone_number' => 'required',
-            'is_marketing' => 'required|bool',
+            'first_name' => 'sometimes|required|string',
+            'last_name' => 'sometimes|required|string',
+            'email' => [
+                'sometimes',
+                'required',
+                Rule::unique('users')
+                    ->when(!empty($user), function ($q) use ($user) {
+                        $q->ignoreModel($user);
+                    })
+            ],
+            'password' => 'sometimes|nullable|confirmed',
+            'password_confirmation' => 'sometimes|nullable|required_with:password|same:password',
+            'avatar' => 'sometimes|required|uuid',
+            'address' => 'sometimes|required',
+            'phone_number' => 'sometimes|required',
+            'is_marketing' => 'sometimes|required|bool',
+
         ];
     }
 

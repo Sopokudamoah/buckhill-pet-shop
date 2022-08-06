@@ -4,11 +4,11 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Events\UserLoggedIn;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\AdminUserDeleteRequest;
-use App\Http\Requests\V1\AdminCreateRequest;
-use App\Http\Requests\V1\AdminLoginRequest;
-use App\Http\Requests\V1\AdminUserEditRequest;
-use App\Http\Requests\V1\UserListingRequest;
+use App\Http\Requests\Admin\V1\AdminCreateRequest;
+use App\Http\Requests\Admin\V1\AdminLoginRequest;
+use App\Http\Requests\Admin\V1\AdminUserDeleteRequest;
+use App\Http\Requests\Admin\V1\AdminUserEditRequest;
+use App\Http\Requests\Admin\V1\UserListingRequest;
 use App\Http\Resources\V1\AdminLoginResource;
 use App\Http\Resources\V1\BaseApiResource;
 use App\Http\Resources\V1\UserResource;
@@ -20,7 +20,7 @@ use Illuminate\Validation\ValidationException;
 use Spatie\QueryBuilder\QueryBuilder;
 
 /**
- * @group Admin
+ * @group Admin endpoint
  *
  *
  * This API endpoint will allow to create a new admin account, login and logout an admin account, as well it will enable the following features:

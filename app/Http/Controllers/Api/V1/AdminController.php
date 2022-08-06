@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Events\UserLoggedIn;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AdminUserDeleteRequest;
 use App\Http\Requests\V1\AdminCreateRequest;
 use App\Http\Requests\V1\AdminLoginRequest;
 use App\Http\Requests\V1\AdminUserEditRequest;
@@ -126,7 +127,7 @@ class AdminController extends Controller
      *
      * @responseFile status=200 storage/responses/admin-user-edit-200.json
      * @responseFile status=403 scenario="when attempt admin account edit" storage/responses/admin-user-edit-403.json
-     * @responseFile status=403 scenario="when attempt to update with existing email" storage/responses/admin-user-edit-422.json
+     * @responseFile status=422 scenario="when attempt to update with existing email" storage/responses/admin-user-edit-422.json
      */
     public function userEdit(AdminUserEditRequest $request, User $user)
     {
@@ -143,7 +144,21 @@ class AdminController extends Controller
         ))->message("User created successfully");
     }
 
-    public function userDelete(Request $request, User $user)
+
+    /**
+     * Delete user account
+     *
+     * @authenticated
+     *
+     * @urlParam uuid string required The UUID of the user.
+     *
+     * @responseFile status=200 storage/responses/admin-user-delete-200.json
+     * @responseFile status=403 scenario="when attempt to delete an admin account edit" storage/responses/admin-user-delete-403.json
+     * @responseFile status=404 scenario="when attempt to delete a non-existing user" storage/responses/admin-user-delete-404.json
+     */
+    public function userDelete(AdminUserDeleteRequest $request, User $user)
     {
+        $user->delete();
+        return (new BaseApiResource())->message("User deleted successfully");
     }
 }

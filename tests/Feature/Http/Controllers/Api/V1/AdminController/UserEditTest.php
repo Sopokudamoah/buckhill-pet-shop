@@ -25,7 +25,7 @@ test('admin can edit user', function () {
     $this->assertEquals($lastname, $user->last_name);
 
     #The line below is of generating response samples for API documentation
-    Storage::drive('responses')->put('admin-user-edit-200.json', $response->content());
+//    Storage::drive('responses')->put('admin-user-edit-200.json', $response->content());
 });
 
 
@@ -43,7 +43,7 @@ test('admin cannot edit admin account', function () {
     $response->assertStatus(403);
 
     #The line below is of generating response samples for API documentation
-    Storage::drive('responses')->put('admin-user-edit-403.json', $response->content());
+//    Storage::drive('responses')->put('admin-user-edit-403.json', $response->content());
 });
 
 
@@ -60,5 +60,5 @@ test('admin cannot edit user email with existing email', function () {
     $response->assertStatus(422);
 
     #The line below is of generating response samples for API documentation
-    Storage::drive('responses')->put('admin-user-edit-422.json', $response->content());
+//    Storage::drive('responses')->put('admin-user-edit-422.json', $response->content());
 });

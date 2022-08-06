@@ -6,6 +6,7 @@ use App\Events\UserLoggedIn;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\AdminCreateRequest;
 use App\Http\Requests\V1\AdminLoginRequest;
+use App\Http\Requests\V1\AdminUserEditRequest;
 use App\Http\Requests\V1\UserListingRequest;
 use App\Http\Resources\V1\AdminLoginResource;
 use App\Http\Resources\V1\BaseApiResource;
@@ -116,8 +117,30 @@ class AdminController extends Controller
         return (new UserResource())->resource($users);
     }
 
-    public function userEdit(Request $request, User $user)
+    /**
+     * Edit user account
+     *
+     * @authenticated
+     *
+     * @urlParam uuid string required The UUID of the user.
+     *
+     * @responseFile status=200 storage/responses/admin-user-edit-200.json
+     * @responseFile status=403 scenario="when attempt admin account edit" storage/responses/admin-user-edit-403.json
+     * @responseFile status=403 scenario="when attempt to update with existing email" storage/responses/admin-user-edit-422.json
+     */
+    public function userEdit(AdminUserEditRequest $request, User $user)
     {
+        $data = $request->validated();
+
+        $user->fill($data);
+
+        if ($user->isDirty()) {
+            $user->save();
+        }
+
+        return (new BaseApiResource(
+            $user->only(['first_name', 'last_name', 'email', 'avatar', 'phone_number', 'id'])
+        ))->message("User created successfully");
     }
 
     public function userDelete(Request $request, User $user)

@@ -9,6 +9,10 @@ test('user can request password reset with email', function () {
 
     $response->assertStatus(200);
 
+    # Dummy test to check if email was sent
+    $emails = app()->make('mailer')->getSymfonyTransport()->messages();
+    $this->assertCount(1, $emails);
+
     #The line below is of generating response samples for API documentation
 //    Storage::drive('responses')->put('user-forgot-password-200.json', $response->content());
 });

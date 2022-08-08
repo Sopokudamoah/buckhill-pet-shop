@@ -2,6 +2,7 @@
 
 
 use App\Http\Controllers\Api\V1\AdminController;
+use App\Http\Controllers\Api\V1\ProductController;
 use App\Http\Controllers\Api\V1\UserController;
 use App\Http\Middleware\AdminMiddleware;
 use Illuminate\Support\Facades\Route;
@@ -35,4 +36,16 @@ Route::prefix('user')->name('user.')->controller(UserController::class)->group(f
         Route::put('edit', 'edit')->name('edit');
         Route::get('orders', 'orders')->name('orders');
     });
+});
+
+
+Route::middleware(['auth:sanctum'])->name('product.')->controller(ProductController::class)->group(function () {
+    Route::prefix('product')->group(function () {
+        Route::post('create', 'create')->name('create');
+        Route::put('{product}', 'update')->name('update');
+        Route::delete('{product}', 'delete')->name('delete');
+        Route::get('{product}', 'show')->name('show');
+    });
+
+    Route::get('products', 'index')->name('index');
 });

@@ -2,7 +2,6 @@
 
 namespace App\Models\Traits;
 
-use Illuminate\Database\Eloquent\Model;
 use Ramsey\Uuid\Uuid;
 
 trait HasUuid
@@ -26,7 +25,7 @@ trait HasUuid
     /**
      * @param $uuid
      * @param string[] $columns
-     * @return Model|null
+     * @return $this|null
      */
     public static function findByUuid($uuid, array $columns = ['*'])
     {

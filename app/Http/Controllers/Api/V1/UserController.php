@@ -40,17 +40,17 @@ class UserController extends Controller
         $credentials = $request->validated();
 
         if (Auth::attempt($credentials)) {
-            $admin = User::firstWhere('email', '=', $credentials['email']);
+            $user = User::firstWhere('email', '=', $credentials['email']);
 
             // TODO: Change implementation from Sanctum to JWT
-            $token = $admin->createToken($admin->full_name)->plainTextToken;
+            $token = $user->createToken()->plainTextToken;
 
-            UserLoggedIn::dispatch($admin);
+            UserLoggedIn::dispatch($user);
 
             return (new AdminLoginResource())->data(
                 [
                     'token' => $token,
-                    'user' => $admin->only(['first_name', 'last_name', 'email', 'avatar', 'phone_number'])
+                    'user' => $user->only(['first_name', 'last_name', 'email', 'avatar', 'phone_number'])
                 ]
             );
         }
@@ -66,12 +66,33 @@ class UserController extends Controller
     {
     }
 
+    /**
+     * Get user account information
+     *
+     * @authenticated
+     *
+     * @responseFile status=200 scenario="when authenticated as user" storage/responses/user-information-200.json
+     */
     public function index()
     {
+        $user = auth()->user();
+        return (new BaseApiResource($user))->message("");
     }
 
+
+    /**
+     * Delete user account
+     *
+     * @authenticated
+     *
+     * @responseFile status=200 scenario="when authenticated as user" storage/responses/user-delete-200.json
+     */
     public function delete()
     {
+        $user = auth()->user();
+
+        $user->delete();
+        return (new BaseApiResource())->message("User deleted successfully");
     }
 
     /**

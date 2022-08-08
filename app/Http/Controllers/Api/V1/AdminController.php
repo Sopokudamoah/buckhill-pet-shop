@@ -141,7 +141,7 @@ class AdminController extends Controller
 
         return (new BaseApiResource(
             $user->only(['first_name', 'last_name', 'email', 'avatar', 'phone_number', 'id'])
-        ))->message("User created successfully");
+        ))->message("User updated successfully");
     }
 
 

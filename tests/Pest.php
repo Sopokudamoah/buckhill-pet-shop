@@ -11,6 +11,7 @@
 |
 */
 
+use Illuminate\Foundation\Testing\Concerns\MakesHttpRequests;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(Tests\TestCase::class)->in('Feature');
@@ -38,6 +39,9 @@ uses(RefreshDatabase::class);
 |
 */
 
+/**
+ * @return MakesHttpRequests
+ */
 function apiTest()
 {
     return test()->withHeaders(['accept' => 'application/json']);

@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Traits\HasUuid;
+use App\Notifications\SendPasswordResetToken;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -78,5 +79,11 @@ class User extends Authenticatable
         ]);
 
         return new NewAccessToken($token, $token->getKey() . '|' . $plainTextToken);
+    }
+
+
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new SendPasswordResetToken($token));
     }
 }

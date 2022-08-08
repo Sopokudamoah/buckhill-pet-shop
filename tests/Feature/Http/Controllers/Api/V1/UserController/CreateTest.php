@@ -27,11 +27,10 @@ test('user can create account', function () {
     $response->assertJsonStructure(['success', 'message', 'data']);
 
     #The line below is of generating response samples for API documentation
-    Storage::drive('responses')->put('user-create-200.json', $response->content());
+//    Storage::drive('responses')->put('user-create-200.json', $response->content());
 });
 
 test('user cannot create account with invalid data', function () {
-
     $user = User::factory()->plainPassword()->make();
     $user->password_confirmation = fake()->password();
 
@@ -56,5 +55,5 @@ test('user cannot create account with invalid data', function () {
     $response->assertSee("The password confirmation does not match.");
 
     #The line below is of generating response samples for API documentation
-    Storage::drive('responses')->put('user-create-422.json', $response->content());
+//    Storage::drive('responses')->put('user-create-422.json', $response->content());
 });

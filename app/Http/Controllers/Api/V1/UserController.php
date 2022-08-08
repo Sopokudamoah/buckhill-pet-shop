@@ -8,12 +8,10 @@ use App\Http\Requests\User\V1\UserCreateRequest;
 use App\Http\Requests\User\V1\UserLoginRequest;
 use App\Http\Resources\V1\AdminLoginResource;
 use App\Http\Resources\V1\BaseApiResource;
-use App\Models\Admin;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
-
 
 /**
  * @group User endpoint

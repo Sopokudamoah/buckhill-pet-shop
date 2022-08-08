@@ -8,13 +8,16 @@ use App\Http\Requests\User\V1\UserCreateRequest;
 use App\Http\Requests\User\V1\UserEditRequest;
 use App\Http\Requests\User\V1\UserForgotPasswordRequest;
 use App\Http\Requests\User\V1\UserLoginRequest;
+use App\Http\Requests\User\V1\UserResetPasswordRequest;
 use App\Http\Resources\V1\AdminLoginResource;
 use App\Http\Resources\V1\BaseApiResource;
 use App\Models\User;
 use App\Notifications\SendPasswordResetToken;
+use Carbon\Carbon;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Password;
@@ -78,14 +81,62 @@ class UserController extends Controller
     {
         $data = $request->validated();
 
-        $trans = Password::sendResetLink($data);
+        $token = Str::random(60);
+        $builder = DB::table('password_resets');
 
-        return (new BaseApiResource())->message(trans($trans));
+        $builder->where('email', '=', $data['email'])
+            ->delete();
 
+        $builder->insert([
+            'email' => $data['email'],
+            'token' => $token,
+            'created_at' => now()
+        ]);
+
+        $user = User::whereEmail($data['email'])->first();
+        $user->sendPasswordResetNotification($token);
+
+        return (new BaseApiResource())->message("We have emailed your password reset link!");
     }
 
-    public function resetPasswordToken()
+
+    /**
+     * Reset password with token
+     *
+     * @authenticated
+     *
+     * @responseFile status=200 scenario="when token is valid" storage/responses/user-password-reset-200.json
+     * @responseFile status=403 scenario="when token is expired" storage/responses/user-password-reset-403.json
+     * @responseFile status=422 scenario="when token/email doesn't exist" storage/responses/user-password-reset-422.json
+     */
+    public function resetPasswordToken(UserResetPasswordRequest $request)
     {
+        $data = $request->validated();
+
+        $builder = DB::table('password_resets')->where('token', '=', $data['token']);
+
+        $password_reset = $builder->first();
+        $token_request_time = Carbon::parse($password_reset->created_at);
+
+        //Check if token is not older than an hour
+        if (now()->greaterThan($token_request_time->addHour())) {
+            $builder->delete();
+
+            return (new BaseApiResource())->success(0)
+                ->message("Reset token is expired")
+                ->response()
+                ->setStatusCode(403);
+        }
+
+        //Reset user password
+        $user = User::firstWhere('email', '=', $data['email']);
+        $user->password = bcrypt($data['password']);
+        $user->save();
+
+        //Delete token
+        $builder->delete();
+
+        return (new BaseApiResource())->success(1)->message("Password has been reset");
     }
 
     /**

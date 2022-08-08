@@ -26,6 +26,8 @@ Route::prefix('user')->name('user.')->controller(UserController::class)->group(f
     Route::post('forgot-password', 'forgotPassword')->name('forgot-password');
     Route::post('reset-password-token', 'resetPasswordToken')->name('reset-password-token');
 
+    Route::get('password-reset/{token}', 'passwordReset')->name('password-reset');
+
     Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/', 'index')->name('index');
         Route::delete('/', 'delete')->name('delete');

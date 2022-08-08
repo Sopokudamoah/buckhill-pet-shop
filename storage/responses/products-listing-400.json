@@ -1,0 +1,1 @@
+{"success":0,"message":"Requested filter(s) `deleted_at` are not allowed. Allowed filter(s) are `title, slug, uuid, category_uuid`.","data":[],"errors":["Requested filter(s) `deleted_at` are not allowed. Allowed filter(s) are `title, slug, uuid, category_uuid`."]}

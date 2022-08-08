@@ -74,4 +74,18 @@ class ProductController extends Controller
 
         return (new ProductResource($product))->message("Product updated successfully");
     }
+
+
+    /**
+     * Show product information
+     *
+     * @authenticated
+     *
+     * @responseFile status=200 storage/responses/show-product-200.json
+     * @responseFile status=404 scenario="when uuid is invalid" storage/responses/show-product-404.json
+     */
+    public function show(Product $product)
+    {
+        return (new ProductResource($product));
+    }
 }

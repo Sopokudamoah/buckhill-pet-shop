@@ -15,7 +15,7 @@ test('user can log in with correct credentials', function () {
     $response->assertJsonStructure(['success', 'message', 'data']);
 
     #The line below is of generating response samples for API documentation
-    Storage::drive('responses')->put('user-login-200.json', $response->content());
+//    Storage::drive('responses')->put('user-login-200.json', $response->content());
 
     $user->refresh();
     $this->assertNotNull($user->last_login_at);
@@ -33,7 +33,7 @@ test('user cannot log in with incorrect credentials', function () {
     $response->assertSee("Invalid login credentials");
 
     #The line below is of generating response samples for API documentation
-    Storage::drive('responses')->put('user-login-422.json', $response->content());
+//    Storage::drive('responses')->put('user-login-422.json', $response->content());
 });
 
 
@@ -49,5 +49,5 @@ test('user cannot log in as an admin', function () {
     $response->assertJsonStructure(['success', 'message', 'data']);
 
     #The line below is of generating response samples for API documentation
-    Storage::drive('responses')->put('admin-user-login-422.json', $response->content());
+//    Storage::drive('responses')->put('admin-user-login-422.json', $response->content());
 });

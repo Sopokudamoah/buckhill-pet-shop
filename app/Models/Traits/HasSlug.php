@@ -8,7 +8,7 @@ use Illuminate\Support\Str;
 /**
  *
  */
-trait Sluggable
+trait HasSlug
 {
     /**
      * @var string
@@ -25,7 +25,7 @@ trait Sluggable
     /**
      * @return void
      */
-    public static function bootSluggable()
+    public static function bootHasSlug()
     {
         static::creating(function (Model $model) {
             $model->{$model->slug_column} = Str::slug($model->{$model->sluggable_column});

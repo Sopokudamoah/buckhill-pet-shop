@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Product\V1\CreateProductRequest;
+use App\Http\Requests\Product\V1\UpdateProductRequest;
 use App\Http\Resources\User\V1\ProductResource;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -50,5 +51,27 @@ class ProductController extends Controller
         $product = Product::create($data);
 
         return (new ProductResource($product))->message("Product created successfully");
+    }
+
+
+    /**
+     * Update product
+     *
+     * @authenticated
+     *
+     * @responseFile status=200 storage/responses/update-product-200.json
+     * @responseFile status=422 scenario="when validation fails" storage/responses/update-product-422.json
+     */
+    public function update(UpdateProductRequest $request, Product $product)
+    {
+        $data = $request->validated();
+
+        $product->fill($data);
+
+        if ($product->isDirty()) {
+            $product->save();
+        }
+
+        return (new ProductResource($product))->message("Product updated successfully");
     }
 }

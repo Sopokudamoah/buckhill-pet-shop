@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Events\UserLoggedIn;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\V1\UserCreateRequest;
+use App\Http\Requests\User\V1\UserEditRequest;
 use App\Http\Requests\User\V1\UserLoginRequest;
 use App\Http\Resources\V1\AdminLoginResource;
 use App\Http\Resources\V1\BaseApiResource;
@@ -110,8 +111,32 @@ class UserController extends Controller
         ))->message("User created successfully");
     }
 
-    public function edit()
+
+    /**
+     * Edit user account
+     *
+     * @authenticated
+     *
+     *
+     * @responseFile status=200 storage/responses/user-edit-200.json
+     * @responseFile status=422 scenario="when attempt to update with existing email" storage/responses/user-edit-422.json
+     *
+     **/
+    public function edit(UserEditRequest $request)
     {
+        $data = $request->validated();
+
+        $user = auth()->user();
+
+        $user->fill($data);
+
+        if ($user->isDirty()) {
+            $user->save();
+        }
+
+        return (new BaseApiResource(
+            $user->only(['first_name', 'last_name', 'email', 'avatar', 'phone_number', 'id'])
+        ))->message("User updated successfully");
     }
 
     public function orders()

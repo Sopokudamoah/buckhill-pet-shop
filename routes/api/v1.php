@@ -22,6 +22,7 @@ Route::prefix('admin')->name('admin.')->controller(AdminController::class)->grou
 //User endpoint routes
 Route::prefix('user')->name('user.')->controller(UserController::class)->group(function () {
     Route::post('login', 'login')->name('login');
+    Route::post('create', 'create')->name('create');
     Route::post('forgot-password', 'forgotPassword')->name('forgot-password');
     Route::post('reset-password-token', 'resetPasswordToken')->name('reset-password-token');
 
@@ -29,7 +30,6 @@ Route::prefix('user')->name('user.')->controller(UserController::class)->group(f
         Route::get('/', 'index')->name('index');
         Route::delete('/', 'delete')->name('delete');
         Route::get('logout', 'logout')->name('logout');
-        Route::post('create', 'create')->name('create');
         Route::put('edit', 'edit')->name('edit');
         Route::get('orders', 'orders')->name('orders');
     });

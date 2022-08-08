@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Events\UserLoggedIn;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\User\V1\UserCreateRequest;
 use App\Http\Requests\User\V1\UserLoginRequest;
 use App\Http\Resources\V1\AdminLoginResource;
 use App\Http\Resources\V1\BaseApiResource;
+use App\Models\Admin;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -90,8 +92,24 @@ class UserController extends Controller
         return (new BaseApiResource())->message("User logged out");
     }
 
-    public function create()
+
+    /**
+     * Create a user account
+     *
+     * @unauthenticated
+     *
+     * @responseFile status=200 storage/responses/user-create-200.json
+     * @responseFile status=422 scenario="when validation fails" storage/responses/user-create-422.json
+     */
+    public function create(UserCreateRequest $request)
     {
+        $data = $request->validated();
+
+        $data['password'] = bcrypt($data['password']);
+        $user = User::create($data);
+        return (new BaseApiResource(
+            $user->only(['first_name', 'last_name', 'email', 'avatar', 'phone_number', 'id'])
+        ))->message("User created successfully");
     }
 
     public function edit()

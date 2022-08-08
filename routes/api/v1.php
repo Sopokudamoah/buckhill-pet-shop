@@ -2,6 +2,7 @@
 
 
 use App\Http\Controllers\Api\V1\AdminController;
+use App\Http\Controllers\Api\V1\BrandController;
 use App\Http\Controllers\Api\V1\ProductController;
 use App\Http\Controllers\Api\V1\UserController;
 use App\Http\Middleware\AdminMiddleware;
@@ -48,4 +49,16 @@ Route::middleware(['auth:sanctum'])->name('product.')->controller(ProductControl
     });
 
     Route::get('products', 'index')->name('index');
+});
+
+
+Route::middleware(['auth:sanctum'])->name('brand.')->controller(BrandController::class)->group(function () {
+    Route::prefix('brand')->group(function () {
+        Route::post('create', 'create')->name('create');
+        Route::put('{brand}', 'update')->name('update');
+        Route::delete('{brand}', 'delete')->name('delete');
+        Route::get('{brand}', 'show')->name('show');
+    });
+
+    Route::get('brands', 'index')->name('index');
 });

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Product\V1\CreateProductRequest;
 use App\Http\Requests\Product\V1\UpdateProductRequest;
-use App\Http\Resources\User\V1\ProductResource;
+use App\Http\Resources\V1\ProductResource;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Spatie\QueryBuilder\QueryBuilder;

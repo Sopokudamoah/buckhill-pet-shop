@@ -88,4 +88,20 @@ class ProductController extends Controller
     {
         return (new ProductResource($product));
     }
+
+
+
+    /**
+     * Delete product
+     *
+     * @authenticated
+     *
+     * @responseFile status=200 storage/responses/delete-product-200.json
+     * @responseFile status=404 scenario="when uuid is invalid" storage/responses/delete-product-404.json
+     */
+    public function delete(Product $product)
+    {
+        $product->delete();
+        return (new ProductResource())->message("Product deleted");
+    }
 }

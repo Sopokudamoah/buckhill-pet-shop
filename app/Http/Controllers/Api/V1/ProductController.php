@@ -26,9 +26,8 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $products = QueryBuilder::for(Product::query())
-            ->with(['category'])
-            ->select(['title', 'uuid', 'category_uuid', 'description', 'metadata'])
+        $products = QueryBuilder::for(Product::query()->join('categories', 'categories.uuid', '=', 'category_uuid'))
+            ->select(['products.title', 'products.uuid', 'category_uuid', 'description', 'metadata'])
             ->allowedFilters(['title', 'uuid', 'category_uuid'])
             ->simplePaginate($request->get('per_page', 15));
 

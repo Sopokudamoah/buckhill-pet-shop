@@ -34,4 +34,45 @@ class CreateProductRequest extends FormRequest
 //            'metadata.file' => 'sometimes|nullable|uuid|exists:files,uuid',
         ];
     }
+
+    /**
+     * @codeCoverageIgnore
+     */
+    public function bodyParameters()
+    {
+        return [
+            'title' => [
+                'description' => 'Product title',
+                'example' => "Dog food"
+            ],
+            'uuid' => [
+                'description' => 'UUID of product',
+                'example' => fake()->uuid()
+            ],
+            'category_uuid' => [
+                'description' => 'UUID of category',
+                'example' => fake()->uuid()
+            ],
+            'price' => [
+                'description' => 'Price of product',
+                'example' => fake()->numberBetween(0, 1000)
+            ],
+            'description' => [
+                'description' => 'Description of product',
+                'example' => fake()->sentences(2, true)
+            ],
+            'metadata' => [
+                'description' => 'Extra information about product',
+                'example' => fake()->uuid()
+            ],
+            'metadata[brand]' => [
+                'description' => 'UUID of brand',
+                'example' => fake()->uuid()
+            ],
+            'metadata[image]' => [
+                'description' => 'UUID of file',
+                'example' => fake()->uuid()
+            ],
+        ];
+    }
 }

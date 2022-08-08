@@ -6,12 +6,19 @@ use App\Events\UserLoggedIn;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\V1\UserCreateRequest;
 use App\Http\Requests\User\V1\UserEditRequest;
+use App\Http\Requests\User\V1\UserForgotPasswordRequest;
 use App\Http\Requests\User\V1\UserLoginRequest;
 use App\Http\Resources\V1\AdminLoginResource;
 use App\Http\Resources\V1\BaseApiResource;
 use App\Models\User;
+use App\Notifications\SendPasswordResetToken;
+use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
 /**
@@ -58,8 +65,23 @@ class UserController extends Controller
         throw ValidationException::withMessages(['email' => 'Invalid login credentials']);
     }
 
-    public function forgotPassword()
+
+    /**
+     * Forgot password
+     *
+     * @unauthenticated
+     *
+     * @responseFile status=200 scenario="user provides a valid email" storage/responses/user-forgot-password-200.json
+     * @responseFile status=422 scenario="user provides a invalid email" storage/responses/user-forgot-password-422.json
+     */
+    public function forgotPassword(UserForgotPasswordRequest $request)
     {
+        $data = $request->validated();
+
+        $trans = Password::sendResetLink($data);
+
+        return (new BaseApiResource())->message(trans($trans));
+
     }
 
     public function resetPasswordToken()

@@ -4,6 +4,7 @@
 use App\Http\Controllers\Api\V1\AdminController;
 use App\Http\Controllers\Api\V1\BrandController;
 use App\Http\Controllers\Api\V1\CategoryController;
+use App\Http\Controllers\Api\V1\FileController;
 use App\Http\Controllers\Api\V1\ProductController;
 use App\Http\Controllers\Api\V1\UserController;
 use App\Http\Middleware\AdminMiddleware;
@@ -75,4 +76,13 @@ Route::middleware(['auth:sanctum'])->name('category.')->controller(CategoryContr
     });
 
     Route::get('categories', 'index')->name('index');
+});
+
+
+// Categories endpoint
+Route::middleware(['auth:sanctum'])->name('file.')->controller(FileController::class)->group(function () {
+    Route::prefix('file')->group(function () {
+        Route::post('upload', 'upload')->name('upload');
+        Route::get('{file}', 'download')->name('download');
+    });
 });

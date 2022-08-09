@@ -3,6 +3,7 @@
 
 use App\Http\Controllers\Api\V1\AdminController;
 use App\Http\Controllers\Api\V1\BrandController;
+use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\ProductController;
 use App\Http\Controllers\Api\V1\UserController;
 use App\Http\Middleware\AdminMiddleware;
@@ -39,7 +40,7 @@ Route::prefix('user')->name('user.')->controller(UserController::class)->group(f
     });
 });
 
-
+//Products endpoint
 Route::middleware(['auth:sanctum'])->name('product.')->controller(ProductController::class)->group(function () {
     Route::prefix('product')->group(function () {
         Route::post('create', 'create')->name('create');
@@ -51,7 +52,7 @@ Route::middleware(['auth:sanctum'])->name('product.')->controller(ProductControl
     Route::get('products', 'index')->name('index');
 });
 
-
+// Brands endpoint
 Route::middleware(['auth:sanctum'])->name('brand.')->controller(BrandController::class)->group(function () {
     Route::prefix('brand')->group(function () {
         Route::post('create', 'create')->name('create');
@@ -61,4 +62,17 @@ Route::middleware(['auth:sanctum'])->name('brand.')->controller(BrandController:
     });
 
     Route::get('brands', 'index')->name('index');
+});
+
+
+// Categories endpoint
+Route::middleware(['auth:sanctum'])->name('category.')->controller(CategoryController::class)->group(function () {
+    Route::prefix('category')->group(function () {
+        Route::post('create', 'create')->name('create');
+        Route::put('{category}', 'update')->name('update');
+        Route::delete('{category}', 'delete')->name('delete');
+        Route::get('{category}', 'show')->name('show');
+    });
+
+    Route::get('categories', 'index')->name('index');
 });

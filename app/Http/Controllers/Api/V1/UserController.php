@@ -9,6 +9,7 @@ use App\Http\Requests\User\V1\UserEditRequest;
 use App\Http\Requests\User\V1\UserForgotPasswordRequest;
 use App\Http\Requests\User\V1\UserLoginRequest;
 use App\Http\Requests\User\V1\UserResetPasswordRequest;
+use App\Http\Resources\Order\V1\OrderResource;
 use App\Http\Resources\V1\AdminLoginResource;
 use App\Http\Resources\V1\BaseApiResource;
 use App\Models\User;
@@ -19,6 +20,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use Spatie\QueryBuilder\QueryBuilder;
 
 /**
  * @group User endpoint
@@ -229,7 +231,21 @@ class UserController extends Controller
         ))->message("User updated successfully");
     }
 
-    public function orders()
+
+    /**
+     * List all user's orders
+     *
+     * @authenticated
+     *
+     * @responseFile status=200 storage/responses/orders-listing-200.json
+     * @responseFile status=400 scenario="when filtered by disallowed field" storage/responses/orders-listing-400.json
+     */
+    public function orders(Request $request)
     {
+        $orders = QueryBuilder::for(auth()->user()->orders())
+            ->allowedFilters(['delivery_fee', 'address', 'products', 'uuid', 'payment_id', 'order_status_id'])
+            ->simplePaginate($request->get('per_page', 15));
+
+        return (new OrderResource())->resource($orders);
     }
 }

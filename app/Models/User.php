@@ -97,6 +97,6 @@ class User extends Authenticatable
 
     public function payments()
     {
-        return $this->hasManyThrough(Payment::class, Order::class);
+        return $this->hasManyThrough(Payment::class, Order::class, 'user_id', 'id', null, 'payment_id')->select(['payments.*']);
     }
 }

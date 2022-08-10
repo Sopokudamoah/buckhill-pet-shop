@@ -27,6 +27,7 @@ class UpdateOrderRequest extends FormRequest
             'address' => 'sometimes|required|array',
             'products' => 'sometimes|required|array',
             'payment_id' => 'sometimes|required|exists:payments,id',
+            'order_status_id' => 'sometimes|required|exists:order_statuses,id',
 
             'address.billing' => 'sometimes|required|string',
             'address.shipping' => 'sometimes|required|string',

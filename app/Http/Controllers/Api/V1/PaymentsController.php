@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Middleware\AdminMiddleware;
 use App\Http\Requests\Payment\V1\CreatePaymentRequest;
 use App\Http\Requests\Payment\V1\UpdatePaymentRequest;
 use App\Http\Resources\V1\BaseApiResource;
@@ -17,6 +18,11 @@ use Spatie\QueryBuilder\QueryBuilder;
  */
 class PaymentsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(AdminMiddleware::class)->except(['create', 'show']);
+    }
+
     /**
      * List all payments
      *
@@ -26,7 +32,7 @@ class PaymentsController extends Controller
      */
     public function index(Request $request)
     {
-        $payments = QueryBuilder::for(auth()->user()->payments())
+        $payments = QueryBuilder::for(Payment::query())
             ->allowedFilters(['details', 'uuid', 'type'])
             ->simplePaginate($request->get('per_page', 15));
 
@@ -102,11 +108,9 @@ class PaymentsController extends Controller
      * @responseFile status=200 storage/responses/delete-payment-200.json
      * @responseFile status=404 scenario="when uuid is invalid" storage/responses/delete-payment-404.json
      */
-    public function delete($uuid)
+    public function delete(Payment $payment)
     {
-        $payment = auth()->user()->payments()->uuid($uuid)->firstOrFail();
         $payment->order()->delete();
-
         $payment->delete();
 
         return (new BaseApiResource())->message("Payment deleted");

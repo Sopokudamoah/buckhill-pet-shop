@@ -1,17 +1,14 @@
 <?php
 
-use App\Models\Order;
 use App\Models\Payment;
 use App\Models\User;
 
 test('user can access payment list', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->isAdmin()->create();
     $token = $user->createToken()->plainTextToken;
 
     //Seed DB with payments for user
-    Order::factory()->for(Payment::factory()->bankTransfer())->for($user)->count(30)->create();
-    $this->assertDatabaseCount($user->payments(), 30);
-
+    Payment::factory()->bankTransfer()->count(30)->create();
 
     $response = apiTest()->withToken($token)->get(route('api.v1.payments.index', ['page' => 1]));
     $response->assertStatus(200);

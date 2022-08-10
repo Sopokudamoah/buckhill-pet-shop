@@ -4,7 +4,7 @@ use App\Models\Payment;
 use App\Models\User;
 
 test('user can update payment using credit card', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->isAdmin()->create();
     $token = $user->createToken()->plainTextToken;
 
     $payment = Payment::factory()->creditCard()->create();
@@ -32,7 +32,7 @@ test('user can update payment using credit card', function () {
 });
 
 test('user cannot update payment with invalid requirements', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->isAdmin()->create();
     $token = $user->createToken()->plainTextToken;
 
     $payment = Payment::factory()->creditCard()->create();

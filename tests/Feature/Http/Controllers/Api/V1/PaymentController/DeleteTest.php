@@ -1,16 +1,14 @@
 <?php
 
-use App\Models\Order;
 use App\Models\Payment;
 use App\Models\User;
 
 test('user can delete payment', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->isAdmin()->create();
 
     $token = $user->createToken()->plainTextToken;
 
     $payment = Payment::factory()->cashOnDelivery()->create();
-    Order::factory()->for($payment)->for($user)->create();
 
     $this->assertModelExists($payment);
 
@@ -23,16 +21,14 @@ test('user can delete payment', function () {
 });
 
 test('user cannot delete payment', function () {
-    $user = User::factory()->create();
-
+    $user = User::factory()->isAdmin()->create();
     $token = $user->createToken()->plainTextToken;
 
     $payment = Payment::factory()->cashOnDelivery()->create();
-    Order::factory()->for($payment)->for(User::factory())->create();
 
     $this->assertModelExists($payment);
 
-    $response = apiTest()->withToken($token)->delete(route('api.v1.payments.delete', $payment));
+    $response = apiTest()->withToken($token)->delete(route('api.v1.payments.delete', fake()->uuid()));
 
     $response->assertStatus(404);
 

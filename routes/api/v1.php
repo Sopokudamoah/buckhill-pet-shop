@@ -98,5 +98,5 @@ Route::middleware(['auth:sanctum'])->name('order.')->controller(OrderController:
         Route::get('{order}', 'show')->name('show');
     });
 
-    Route::get('categories', 'index')->name('index');
+    Route::get('orders', 'index')->name('index');
 });

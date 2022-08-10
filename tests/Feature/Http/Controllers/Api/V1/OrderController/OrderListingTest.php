@@ -13,7 +13,7 @@ test('user can access order list', function () {
     Order::factory()->for($user)->for(Payment::factory())->count(30)
         ->state(
             new Sequence(
-                fn($sequence) => [
+                fn ($sequence) => [
                     'payment_id' => Payment::factory()->{fake()->randomElement(
                         ['bankTransfer', 'creditCard', 'cashOnDelivery']
                     )}(),

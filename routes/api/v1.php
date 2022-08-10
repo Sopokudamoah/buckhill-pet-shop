@@ -83,6 +83,6 @@ Route::middleware(['auth:sanctum'])->name('category.')->controller(CategoryContr
 Route::middleware(['auth:sanctum'])->name('file.')->controller(FileController::class)->group(function () {
     Route::prefix('file')->group(function () {
         Route::post('upload', 'upload')->name('upload');
-        Route::get('{file}', 'download')->name('download');
+        Route::get('{file}', 'show')->name('show');
     });
 });

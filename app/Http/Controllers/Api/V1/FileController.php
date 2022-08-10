@@ -40,7 +40,22 @@ class FileController extends Controller
         return (new BaseApiResource())->message("File uploaded successfully")->data(['uuid' => $file->uuid]);
     }
 
-    public function download(Request $request)
+
+    /**
+     * Show file
+     *
+     * @authenticated
+     *
+     * @queryParam download boolean Download file instead of viewing details.
+     *
+     * @responseFile status=200 storage/responses/file-show-200.json
+     * @responseFile status=404 scenario="when uuid is invalid" storage/responses/file-show-404.json
+     */
+    public function show(File $file, Request $request)
     {
+        if ($request->get('download')) {
+            return $file->download();
+        }
+        return (new BaseApiResource())->data($file);
     }
 }

@@ -23,8 +23,8 @@ return new class extends Migration
             $table->foreignIdFor(Payment::class)->references('id')->on('payments');
             $table->uuid()->unique();
             $table->json('products');
-            $table->json('delivery_fee');
-            $table->float('address')->nullable();
+            $table->float('delivery_fee')->nullable();
+            $table->json('address');
             $table->float('amount');
             $table->timestamp('shipped_at')->nullable();
             $table->timestamps();

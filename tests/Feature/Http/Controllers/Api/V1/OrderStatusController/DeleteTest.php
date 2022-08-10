@@ -3,8 +3,8 @@
 use App\Models\OrderStatus;
 use App\Models\User;
 
-test('user can delete order status', function () {
-    $user = User::factory()->create();
+test('Admin can delete order status', function () {
+    $user = User::factory()->isAdmin()->create();
 
     $token = $user->createToken()->plainTextToken;
 

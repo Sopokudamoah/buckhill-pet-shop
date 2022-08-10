@@ -3,8 +3,8 @@
 use App\Models\Category;
 use App\Models\User;
 
-test('user can create order status', function () {
-    $user = User::factory()->create();
+test('admin can create order status', function () {
+    $user = User::factory()->isAdmin()->create();
     $token = $user->createToken()->plainTextToken;
 
     $order_status = Category::factory()->make();

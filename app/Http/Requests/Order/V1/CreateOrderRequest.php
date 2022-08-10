@@ -28,6 +28,7 @@ class CreateOrderRequest extends FormRequest
             'products' => 'required|array',
             'payment_id' => 'required|exists:payments,id',
             'order_status_id' => 'required|exists:order_statuses,id',
+            'user_id' => 'required|exists:users,id',
 
             'address.billing' => 'required|string',
             'address.shipping' => 'required|string',

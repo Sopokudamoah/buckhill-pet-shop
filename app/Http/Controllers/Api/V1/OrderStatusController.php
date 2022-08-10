@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Middleware\AdminMiddleware;
 use App\Http\Requests\OrderStatus\V1\CreateOrderStatusRequest;
 use App\Http\Resources\V1\BaseApiResource;
 use App\Models\OrderStatus;
@@ -16,6 +17,11 @@ use Spatie\QueryBuilder\QueryBuilder;
  */
 class OrderStatusController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(AdminMiddleware::class)->except('index');
+    }
+
     /**
      * List all order statuses
      *

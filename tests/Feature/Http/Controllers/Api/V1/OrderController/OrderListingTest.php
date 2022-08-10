@@ -5,8 +5,8 @@ use App\Models\Payment;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 
-test('user can access order list', function () {
-    $user = User::factory()->create();
+test('admin can access order list', function () {
+    $user = User::factory()->isAdmin()->create();
     $token = $user->createToken()->plainTextToken;
 
     //Seed DB with orders for user
@@ -31,8 +31,8 @@ test('user can access order list', function () {
 //    Storage::drive('responses')->put('orders-listing-200.json', $response->content());
 });
 
-test('user cannot filter by disallowed fields', function () {
-    $user = User::factory()->create();
+test('admin cannot filter by disallowed fields', function () {
+    $user = User::factory()->isAdmin()->create();
     $token = $user->createToken()->plainTextToken;
 
     $response = apiTest()->withToken($token)->get(

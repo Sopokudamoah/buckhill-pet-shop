@@ -3,8 +3,8 @@
 use App\Models\Order;
 use App\Models\User;
 
-test('user can delete order', function () {
-    $user = User::factory()->create();
+test('admin can delete order', function () {
+    $user = User::factory()->isAdmin()->create();
 
     $token = $user->createToken()->plainTextToken;
 
@@ -19,8 +19,8 @@ test('user can delete order', function () {
 //    Storage::drive('responses')->put('delete-order-200.json', $response->content());
 });
 
-test('user cannot delete order if uuid is invalid', function () {
-    $user = User::factory()->create();
+test('admin cannot delete order if uuid is invalid', function () {
+    $user = User::factory()->isAdmin()->create();
 
     $token = $user->createToken()->plainTextToken;
 

@@ -4,8 +4,8 @@ use App\Models\Order;
 use App\Models\Payment;
 use App\Models\User;
 
-test('user can update order', function () {
-    $user = User::factory()->create();
+test('admin can update order', function () {
+    $user = User::factory()->isAdmin()->create();
     $token = $user->createToken()->plainTextToken;
 
     $order = Order::factory()->for($user)->withPayment('credit_card')->create();
@@ -31,8 +31,8 @@ test('user can update order', function () {
 });
 
 
-test('user cannot update order with invalid requirements', function () {
-    $user = User::factory()->create();
+test('admin cannot update order with invalid requirements', function () {
+    $user = User::factory()->isAdmin()->create();
     $token = $user->createToken()->plainTextToken;
 
     $order = Order::factory()->for($user)->withPayment('credit_card')->create();

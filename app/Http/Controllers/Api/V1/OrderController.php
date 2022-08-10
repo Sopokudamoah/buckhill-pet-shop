@@ -4,12 +4,12 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Events\OrderCreated;
 use App\Http\Controllers\Controller;
+use App\Http\Middleware\AdminMiddleware;
 use App\Http\Requests\Order\V1\CreateOrderRequest;
 use App\Http\Requests\Order\V1\UpdateOrderRequest;
 use App\Http\Resources\Order\V1\OrderResource;
 use App\Http\Resources\V1\BaseApiResource;
 use App\Models\Order;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -20,6 +20,11 @@ use Spatie\QueryBuilder\QueryBuilder;
  */
 class OrderController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(AdminMiddleware::class)->except(['create', 'show']);
+    }
+
     /**
      * List all orders
      *
@@ -30,12 +35,12 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
-        $products = QueryBuilder::for(auth()->user()->orders())
+        $orders = QueryBuilder::for(Order::query())
             ->allowedFilters(['delivery_fee', 'address', 'products', 'uuid', 'payment_id', 'order_status_id'])
             ->simplePaginate($request->get('per_page', 15));
 
 
-        return (new OrderResource())->resource($products);
+        return (new OrderResource())->resource($orders);
     }
 
 
@@ -51,10 +56,7 @@ class OrderController extends Controller
     {
         $data = $request->validated();
 
-        /** @var User $user */
-        $user = auth()->user();
-
-        $order = $user->orders()->create($data);
+        $order = Order::create($data);
 
         //Fire event when order is created
         OrderCreated::dispatch($order);
@@ -107,9 +109,8 @@ class OrderController extends Controller
      * @responseFile status=200 storage/responses/delete-order-200.json
      * @responseFile status=404 scenario="when uuid is invalid" storage/responses/delete-order-404.json
      */
-    public function delete($uuid)
+    public function delete(Order $order)
     {
-        $order = auth()->user()->orders()->uuid($uuid)->firstOrFail();
         $order->delete();
         return (new BaseApiResource())->message("Order deleted");
     }

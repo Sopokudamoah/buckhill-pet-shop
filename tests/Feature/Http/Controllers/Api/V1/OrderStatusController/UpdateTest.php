@@ -3,8 +3,8 @@
 use App\Models\OrderStatus;
 use App\Models\User;
 
-test('user can update order status', function () {
-    $user = User::factory()->create();
+test('admin can update order status', function () {
+    $user = User::factory()->isAdmin()->create();
     $token = $user->createToken()->plainTextToken;
 
     $order_status = OrderStatus::factory()->create();

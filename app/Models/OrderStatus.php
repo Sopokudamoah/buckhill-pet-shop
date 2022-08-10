@@ -2,10 +2,18 @@
 
 namespace App\Models;
 
+use App\Models\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class OrderStatus extends Model
 {
     use HasFactory;
+    use HasUuid;
+
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class);
+    }
 }

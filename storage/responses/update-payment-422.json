@@ -1,0 +1,1 @@
+{"success":0,"message":"The details.swift field is required when type is bank_transfer. (and 2 more errors)","data":[],"errors":{"details.swift":["The details.swift field is required when type is bank_transfer."],"details.iban":["The details.iban field is required when type is bank_transfer."],"details.name":["The details.name field is required when type is bank_transfer."]}}

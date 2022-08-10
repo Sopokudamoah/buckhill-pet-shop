@@ -14,7 +14,7 @@ use Spatie\QueryBuilder\QueryBuilder;
 /**
  * @group Payments endpoint
  *
- * This endpoint handles the CRUD methods for the Orders.
+ * This endpoint handles the CRUD methods for the Payments.
  */
 class PaymentsController extends Controller
 {
@@ -74,7 +74,7 @@ class PaymentsController extends Controller
             $payment->save();
         }
 
-        return (new CategoryResource($payment))->message("Payment updated successfully");
+        return (new BaseApiResource($payment))->message("Payment updated successfully");
     }
 
 

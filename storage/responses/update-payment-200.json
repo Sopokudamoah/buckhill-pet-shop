@@ -1,0 +1,1 @@
+{"success":1,"message":"Payment updated successfully","data":{"id":36,"uuid":"a6fed277-1416-4cbb-b138-3d010db12d9f","type":"bank_transfer","details":{"swift":"BRBHBCGG","iban":"KW10FAAL4995894809223201524235","name":"Mrs. Berneice Gerlach"},"created_at":"2022-08-10T20:59:04.000000Z","updated_at":"2022-08-10T20:59:04.000000Z"},"errors":[]}

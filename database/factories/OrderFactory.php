@@ -5,8 +5,11 @@ namespace Database\Factories;
 use App\Models\Category;
 use App\Models\Order;
 use App\Models\OrderStatus;
+use App\Models\Payment;
 use App\Models\Product;
+use BadMethodCallException;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 /**
  * @property float $total
@@ -37,5 +40,25 @@ class OrderFactory extends Factory
             'amount' => $this->total,
             'order_status_id' => OrderStatus::inRandomOrder()->value('id')
         ];
+    }
+
+    /**
+     * @param $method
+     * @return OrderFactory
+     * @throws BadMethodCallException
+     * @props credit|cr|skdf
+     */
+
+    public function withPayment($method = null)
+    {
+        if (empty($method)) {
+            $method = fake()->randomElement(['credit_card', 'cash_on_delivery', 'bank_transfer']);
+        }
+        return $this->state(function (array $attributes) use ($method) {
+            $method = Str::camel($method);
+            return [
+                'payment_id' => Payment::factory()->{$method}()->create()
+            ];
+        });
     }
 }

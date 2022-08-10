@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Events\OrderCreated;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Order\V1\CreateOrderRequest;
 use App\Http\Resources\Order\V1\OrderResource;
 use App\Http\Resources\V1\CategoryResource;
 use App\Models\Order;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -43,12 +46,18 @@ class OrderController extends Controller
      * @responseFile status=200 storage/responses/create-order-200.json
      * @responseFile status=422 scenario="when validation fails" storage/responses/create-order-422.json
      */
-    public function create(CreateCategoryRequest $request)
+    public function create(CreateOrderRequest $request)
     {
         $data = $request->validated();
-        $category = Order::create($data);
 
-        return (new CategoryResource($category))->message("Order created successfully");
+        /** @var User $user */
+        $user = auth()->user();
+
+        $order = $user->orders()->create($data);
+
+        //Fire event when order is created
+        OrderCreated::dispatch($order);
+        return (new OrderResource($order))->message("Order created successfully");
     }
 
 

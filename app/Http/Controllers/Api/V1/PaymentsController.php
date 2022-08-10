@@ -100,9 +100,13 @@ class PaymentsController extends Controller
      * @responseFile status=200 storage/responses/delete-payment-200.json
      * @responseFile status=404 scenario="when uuid is invalid" storage/responses/delete-payment-404.json
      */
-    public function delete(Payment $category)
+    public function delete($uuid)
     {
-        $category->delete();
+        $payment = auth()->user()->payments()->uuid($uuid)->firstOrFail();
+        $payment->order()->delete();
+
+        $payment->delete();
+
         return (new BaseApiResource())->message("Payment deleted");
     }
 }

@@ -29,7 +29,7 @@ class PaymentFactory extends Factory
                     'holder_name' => fake()->name(),
                     'number' => fake()->creditCardNumber(),
                     'ccv' => fake()->numberBetween(111, 999),
-                    'expire_date' => fake()->creditCardExpirationDate()
+                    'expire_date' => fake()->creditCardExpirationDate()->format('m/y')
                 ],
             ];
         });

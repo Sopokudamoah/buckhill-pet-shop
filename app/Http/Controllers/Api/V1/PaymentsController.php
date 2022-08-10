@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Payment\V1\CreatePaymentRequest;
 use App\Http\Requests\Payment\V1\UpdatePaymentRequest;
 use App\Http\Resources\V1\BaseApiResource;
-use App\Http\Resources\V1\CategoryResource;
 use App\Models\Payment;
 use Illuminate\Http\Request;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -84,11 +83,12 @@ class PaymentsController extends Controller
      * @authenticated
      *
      * @responseFile status=200 storage/responses/show-payment-200.json
-     * @responseFile status=404 scenario="when uuid is invalid" storage/responses/show-payment-404.json
+     * @responseFile status=404 scenario="when payment doesn't belong to user" storage/responses/show-payment-404.json
      */
-    public function show(Payment $category)
+    public function show($uuid)
     {
-        return (new CategoryResource($category));
+        $payment = auth()->user()->payments()->uuid($uuid)->firstOrFail();
+        return (new BaseApiResource($payment));
     }
 
 
@@ -103,6 +103,6 @@ class PaymentsController extends Controller
     public function delete(Payment $category)
     {
         $category->delete();
-        return (new CategoryResource())->message("Payment deleted");
+        return (new BaseApiResource())->message("Payment deleted");
     }
 }

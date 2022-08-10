@@ -7,7 +7,6 @@ use Illuminate\Database\Seeder;
 
 class OrderStatusSeeder extends Seeder
 {
-
     /**
      * Run the database seeds.
      *

@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\V1\BrandController;
 use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\FileController;
 use App\Http\Controllers\Api\V1\OrderController;
+use App\Http\Controllers\Api\V1\PaymentsController;
 use App\Http\Controllers\Api\V1\ProductController;
 use App\Http\Controllers\Api\V1\UserController;
 use App\Http\Middleware\AdminMiddleware;
@@ -99,4 +100,17 @@ Route::middleware(['auth:sanctum'])->name('order.')->controller(OrderController:
     });
 
     Route::get('orders', 'index')->name('index');
+});
+
+
+// Payments endpoint
+Route::middleware(['auth:sanctum'])->name('payments.')->controller(PaymentsController::class)->group(function () {
+    Route::prefix('payments')->group(function () {
+        Route::post('create', 'create')->name('create');
+        Route::put('{payment}', 'update')->name('update');
+        Route::delete('{payment}', 'delete')->name('delete');
+        Route::get('{payment}', 'show')->name('show');
+    });
+
+    Route::get('payments', 'index')->name('index');
 });

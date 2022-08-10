@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\V1\BrandController;
 use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\FileController;
 use App\Http\Controllers\Api\V1\OrderController;
+use App\Http\Controllers\Api\V1\OrderStatusController;
 use App\Http\Controllers\Api\V1\PaymentsController;
 use App\Http\Controllers\Api\V1\ProductController;
 use App\Http\Controllers\Api\V1\UserController;
@@ -113,4 +114,17 @@ Route::middleware(['auth:sanctum'])->name('payments.')->controller(PaymentsContr
     });
 
     Route::get('payments', 'index')->name('index');
+});
+
+
+// Orders statuses endpoint
+Route::middleware(['auth:sanctum'])->name('order-status.')->controller(OrderStatusController::class)->group(function () {
+    Route::prefix('order-status')->group(function () {
+        Route::post('create', 'create')->name('create');
+        Route::put('{order_status}', 'update')->name('update');
+        Route::delete('{order_status}', 'delete')->name('delete');
+        Route::get('{order_status}', 'show')->name('show');
+    });
+
+    Route::get('order-statuses', 'index')->name('index');
 });

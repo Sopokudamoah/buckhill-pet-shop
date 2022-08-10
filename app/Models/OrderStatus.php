@@ -12,6 +12,8 @@ class OrderStatus extends Model
     use HasFactory;
     use HasUuid;
 
+    protected $fillable = ['title', 'uuid'];
+
     public function orders(): HasMany
     {
         return $this->hasMany(Order::class);

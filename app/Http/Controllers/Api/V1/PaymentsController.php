@@ -95,6 +95,8 @@ class PaymentsController extends Controller
     /**
      * Delete payment
      *
+     *  NOTE: The associated order for this payment will be deleted as well
+     *
      * @authenticated
      *
      * @responseFile status=200 storage/responses/delete-payment-200.json

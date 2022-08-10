@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Category;
 use App\Models\Order;
+use App\Models\OrderStatus;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -34,6 +35,7 @@ class OrderFactory extends Factory
             'delivery_fee' => $this->total > 500 ? null : 15,
             'address' => ['billing' => fake()->streetAddress(), 'shipping' => fake()->streetAddress()],
             'amount' => $this->total,
+            'order_status_id' => OrderStatus::inRandomOrder()->value('id')
         ];
     }
 }

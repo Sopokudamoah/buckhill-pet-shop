@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Events\OrderCreated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Order\V1\CreateOrderRequest;
+use App\Http\Requests\Order\V1\UpdateOrderRequest;
 use App\Http\Resources\Order\V1\OrderResource;
 use App\Http\Resources\V1\CategoryResource;
 use App\Models\Order;
@@ -69,17 +70,17 @@ class OrderController extends Controller
      * @responseFile status=200 storage/responses/update-order-200.json
      * @responseFile status=422 scenario="when validation fails" storage/responses/update-order-422.json
      */
-    public function update(UpdateCategoryRequest $request, Order $category)
+    public function update(UpdateOrderRequest $request, Order $order)
     {
         $data = $request->validated();
 
-        $category->fill($data);
+        $order->fill($data);
 
-        if ($category->isDirty()) {
-            $category->save();
+        if ($order->isDirty()) {
+            $order->save();
         }
 
-        return (new CategoryResource($category))->message("Order updated successfully");
+        return (new OrderResource($order))->message("Order updated successfully");
     }
 
 
@@ -91,9 +92,9 @@ class OrderController extends Controller
      * @responseFile status=200 storage/responses/show-order-200.json
      * @responseFile status=404 scenario="when uuid is invalid" storage/responses/show-order-404.json
      */
-    public function show(Order $category)
+    public function show(Order $order)
     {
-        return (new CategoryResource($category));
+        return (new CategoryResource($order));
     }
 
 
@@ -105,9 +106,9 @@ class OrderController extends Controller
      * @responseFile status=200 storage/responses/delete-order-200.json
      * @responseFile status=404 scenario="when uuid is invalid" storage/responses/delete-order-404.json
      */
-    public function delete(Order $category)
+    public function delete(Order $order)
     {
-        $category->delete();
+        $order->delete();
         return (new CategoryResource())->message("Order deleted");
     }
 }

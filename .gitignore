@@ -20,3 +20,4 @@ yarn-error.log
 .test-results
 test.sh
 *.DS_Store
+/storage/pet-shop

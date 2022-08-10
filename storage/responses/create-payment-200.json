@@ -1,0 +1,1 @@
+{"success":1,"message":"Payment created successfully","data":{"type":"bank_transfer","details":{"swift":"KWMWXUO1CO7","iban":"CH93140219L926372ZUCG","name":"Morton Wehner"},"uuid":"fec41afe-abda-4bfc-94e3-88ab81b4f00e","updated_at":"2022-08-10T20:13:12.000000Z","created_at":"2022-08-10T20:13:12.000000Z","id":2},"errors":[]}

@@ -8,6 +8,7 @@ use App\Notifications\SendPasswordResetToken;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
@@ -85,5 +86,17 @@ class User extends Authenticatable
     public function sendPasswordResetNotification($token)
     {
         $this->notify(new SendPasswordResetToken($token));
+    }
+
+
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class);
+    }
+
+
+    public function payments()
+    {
+        return $this->hasManyThrough(Payment::class, Order::class, 'user_id', 'id', null, 'payment_id')->select(['payments.*']);
     }
 }

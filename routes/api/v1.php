@@ -5,6 +5,9 @@ use App\Http\Controllers\Api\V1\AdminController;
 use App\Http\Controllers\Api\V1\BrandController;
 use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\FileController;
+use App\Http\Controllers\Api\V1\OrderController;
+use App\Http\Controllers\Api\V1\OrderStatusController;
+use App\Http\Controllers\Api\V1\PaymentsController;
 use App\Http\Controllers\Api\V1\ProductController;
 use App\Http\Controllers\Api\V1\UserController;
 use App\Http\Middleware\AdminMiddleware;
@@ -79,10 +82,49 @@ Route::middleware(['auth:sanctum'])->name('category.')->controller(CategoryContr
 });
 
 
-// Categories endpoint
+// Files endpoint
 Route::middleware(['auth:sanctum'])->name('file.')->controller(FileController::class)->group(function () {
     Route::prefix('file')->group(function () {
         Route::post('upload', 'upload')->name('upload');
         Route::get('{file}', 'show')->name('show');
     });
+});
+
+
+// Orders endpoint
+Route::middleware(['auth:sanctum'])->name('order.')->controller(OrderController::class)->group(function () {
+    Route::prefix('order')->group(function () {
+        Route::post('create', 'create')->name('create');
+        Route::put('{order}', 'update')->name('update');
+        Route::delete('{order}', 'delete')->name('delete');
+        Route::get('{order}', 'show')->name('show');
+    });
+
+    Route::get('orders', 'index')->name('index');
+});
+
+
+// Payments endpoint
+Route::middleware(['auth:sanctum'])->name('payments.')->controller(PaymentsController::class)->group(function () {
+    Route::prefix('payments')->group(function () {
+        Route::post('create', 'create')->name('create');
+        Route::put('{payment}', 'update')->name('update');
+        Route::delete('{payment}', 'delete')->name('delete');
+        Route::get('{payment}', 'show')->name('show');
+    });
+
+    Route::get('payments', 'index')->name('index');
+});
+
+
+// Orders statuses endpoint
+Route::middleware(['auth:sanctum'])->name('order-status.')->controller(OrderStatusController::class)->group(function () {
+    Route::prefix('order-status')->group(function () {
+        Route::post('create', 'create')->name('create');
+        Route::put('{order_status}', 'update')->name('update');
+        Route::delete('{order_status}', 'delete')->name('delete');
+        Route::get('{order_status}', 'show')->name('show');
+    });
+
+    Route::get('order-statuses', 'index')->name('index');
 });

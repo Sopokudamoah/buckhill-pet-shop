@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Order\V1\CreateOrderRequest;
 use App\Http\Requests\Order\V1\UpdateOrderRequest;
 use App\Http\Resources\Order\V1\OrderResource;
+use App\Http\Resources\V1\BaseApiResource;
 use App\Http\Resources\V1\CategoryResource;
 use App\Models\Order;
 use App\Models\User;
@@ -92,9 +93,10 @@ class OrderController extends Controller
      * @responseFile status=200 storage/responses/show-order-200.json
      * @responseFile status=404 scenario="when uuid is invalid" storage/responses/show-order-404.json
      */
-    public function show(Order $order)
+    public function show($uuid)
     {
-        return (new CategoryResource($order));
+        $order = auth()->user()->orders()->uuid($uuid)->firstOrFail();
+        return (new BaseApiResource($order));
     }
 
 

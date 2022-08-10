@@ -8,7 +8,6 @@ use App\Http\Requests\Order\V1\CreateOrderRequest;
 use App\Http\Requests\Order\V1\UpdateOrderRequest;
 use App\Http\Resources\Order\V1\OrderResource;
 use App\Http\Resources\V1\BaseApiResource;
-use App\Http\Resources\V1\CategoryResource;
 use App\Models\Order;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -108,9 +107,10 @@ class OrderController extends Controller
      * @responseFile status=200 storage/responses/delete-order-200.json
      * @responseFile status=404 scenario="when uuid is invalid" storage/responses/delete-order-404.json
      */
-    public function delete(Order $order)
+    public function delete($uuid)
     {
+        $order = auth()->user()->orders()->uuid($uuid)->firstOrFail();
         $order->delete();
-        return (new CategoryResource())->message("Order deleted");
+        return (new BaseApiResource())->message("Order deleted");
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use App\Http\Resources\V1\BaseApiResource;
+use Firebase\JWT\ExpiredException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
@@ -91,6 +92,16 @@ class Handler extends ExceptionHandler
                     ->success(0)
                     ->response()
                     ->setStatusCode(404);
+            }
+
+            if ($e instanceof ExpiredException) {
+                $message = $e->getMessage();
+                return (new BaseApiResource())
+                    ->errors([$message])
+                    ->message($message)
+                    ->success(0)
+                    ->response()
+                    ->setStatusCode(400);
             }
         }
 

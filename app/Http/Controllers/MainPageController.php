@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\V1\BaseApiResource;
 use App\Models\Post;
+use App\Models\Promotion;
 use Illuminate\Http\Request;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -38,5 +39,18 @@ class MainPageController extends Controller
     public function showBlog(Post $post)
     {
         return (new BaseApiResource($post));
+    }
+
+    /**
+     * List promotions
+     *
+     * @unauthenticated
+     *
+     * @responseFile status=200 storage/responses/promotion-listing-200.json
+     */
+    public function promotions(Request $request)
+    {
+        $promotions = QueryBuilder::for(Promotion::query())->simplePaginate($request->get('limit', 15));
+        return (new BaseApiResource())->resource($promotions);
     }
 }

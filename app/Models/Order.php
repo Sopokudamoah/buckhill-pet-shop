@@ -24,6 +24,8 @@ class Order extends Model
         'shipped_at'
     ];
 
+    protected $with = ['orderStatus:id,title', 'payment:id,type,details'];
+
     protected $casts = ['address' => 'array', 'products' => 'array'];
 
     protected $attributes = ['order_status_id' => 1];

@@ -47,7 +47,6 @@ class AdminController extends Controller
         if (Auth::attempt($credentials)) {
             $admin = Admin::firstWhere('email', '=', $credentials['email']);
 
-            // TODO: Change implementation from Sanctum to JWT
             $token = $admin->createToken($admin->full_name)->plainTextToken;
 
             UserLoggedIn::dispatch($admin);
@@ -73,7 +72,6 @@ class AdminController extends Controller
      */
     public function logout(Request $request)
     {
-        //TODO: Re-write for JWT implementation
         $token = $request->user()->currentAccessToken();
         $token->delete();
 

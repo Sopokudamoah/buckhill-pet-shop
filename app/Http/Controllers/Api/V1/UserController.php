@@ -49,7 +49,6 @@ class UserController extends Controller
         if (Auth::attempt($credentials)) {
             $user = User::firstWhere('email', '=', $credentials['email']);
 
-            // TODO: Change implementation from Sanctum to JWT
             $token = $user->createToken()->plainTextToken;
 
             UserLoggedIn::dispatch($user);
@@ -175,7 +174,6 @@ class UserController extends Controller
      */
     public function logout(Request $request)
     {
-        //TODO: Re-write for JWT implementation
         $token = $request->user()->currentAccessToken();
         $token->delete();
 

@@ -14,10 +14,17 @@ class OrderStatusSeeder extends Seeder
      */
     public function run()
     {
-        $statuses = ['open', 'pending', 'payment', 'paid', 'shipped', 'cancelled'];
+        $statuses = [
+            '1' => 'open',
+            '2' => 'pending',
+            '3' => 'payment',
+            '4' => 'paid',
+            '5' => 'shipped',
+            '6' => 'cancelled'
+        ];
 
-        foreach ($statuses as $status) {
-            OrderStatus::updateOrCreate(['title' => $status], ['title' => $status]);
+        foreach ($statuses as $id => $status) {
+            OrderStatus::updateOrCreate(['id' => $id], ['title' => $status, 'id' => $id]);
         }
     }
 }

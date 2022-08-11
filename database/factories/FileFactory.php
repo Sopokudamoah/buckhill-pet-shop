@@ -20,7 +20,7 @@ class FileFactory extends Factory
     public function definition()
     {
         $filename = fake()->uuid().'.png';
-        $file = UploadedFile::fake()->image($filename);
+        $file = UploadedFile::fake()->image($filename, 200, 200);
 
         return [
             'name' => $file->getClientOriginalName(),

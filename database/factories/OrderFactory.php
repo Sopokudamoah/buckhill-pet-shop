@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Models\Category;
 use App\Models\Order;
 use App\Models\OrderStatus;
 use App\Models\Payment;
@@ -24,7 +23,7 @@ class OrderFactory extends Factory
      */
     public function definition()
     {
-        $products = Product::factory()->for(Category::factory())->count(fake()->numberBetween(1, 5))->create();
+        $products = Product::query()->inRandomOrder()->take(fake()->numberBetween(1, 5))->get();
 
         $products = $products->map(function (Product $product) {
             $quantity = fake()->numberBetween(1, 5);
@@ -54,10 +53,13 @@ class OrderFactory extends Factory
         if (empty($method)) {
             $method = fake()->randomElement(['credit_card', 'cash_on_delivery', 'bank_transfer']);
         }
+
         return $this->state(function (array $attributes) use ($method) {
             $method = Str::camel($method);
             return [
-                'payment_id' => Payment::factory()->{$method}()->create()
+                'payment_id' => in_array($attributes['order_status_id'], ['4', '5']) ? null : Payment::factory(
+                )->{$method}()->create(),
+                'shipped_at' => $attributes['order_status_id'] == '5' ? fake()->dateTime() : null
             ];
         });
     }

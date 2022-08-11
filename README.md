@@ -2,10 +2,6 @@
 
 An API for managing an online pet shop. The requirements can be found [here](https://buckhill.atlassian.net/wiki/spaces/BR/blog/2022/07/22/1690435585/Backend+Developer+Task+July+2022+Pet+Shop+eCommerce).
 
-
-## API Documentation
-A copy of the openAPI yaml file can be found 
-
 ## Requirements
 
 - PHP 8.1

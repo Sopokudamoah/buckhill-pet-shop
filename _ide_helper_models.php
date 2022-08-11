@@ -37,12 +37,10 @@ namespace App\Models{
  * @property-read int|null $orders_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Payment[] $payments
  * @property-read int|null $payments_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\Laravel\Sanctum\PersonalAccessToken[] $tokens
- * @property-read int|null $tokens_count
  * @method static \Illuminate\Database\Eloquent\Builder|Admin newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Admin newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Admin query()
- * @method static \Illuminate\Database\Eloquent\Builder|User uuid(array|string $value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User uuid(string $value)
  * @method static \Illuminate\Database\Eloquent\Builder|Admin whereAddress($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Admin whereAvatar($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Admin whereCreatedAt($value)
@@ -76,7 +74,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Brand newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Brand newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Brand query()
- * @method static \Illuminate\Database\Eloquent\Builder|Brand uuid(array|string $value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Brand uuid(string $value)
  * @method static \Illuminate\Database\Eloquent\Builder|Brand whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Brand whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Brand whereSlug($value)
@@ -101,7 +99,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Category newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Category newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Category query()
- * @method static \Illuminate\Database\Eloquent\Builder|Category uuid(array|string $value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Category uuid(string $value)
  * @method static \Illuminate\Database\Eloquent\Builder|Category whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Category whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Category whereSlug($value)
@@ -124,10 +122,11 @@ namespace App\Models{
  * @property string $type Mime type
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Database\Factories\FileFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|File newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|File newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|File query()
- * @method static \Illuminate\Database\Eloquent\Builder|File uuid(array|string $value)
+ * @method static \Illuminate\Database\Eloquent\Builder|File uuid(string $value)
  * @method static \Illuminate\Database\Eloquent\Builder|File whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|File whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|File whereName($value)
@@ -149,13 +148,12 @@ namespace App\Models{
  * @property string $unique_id
  * @property string $token_title
  * @property int|null $restrictions
- * @property string|null $permissions
+ * @property array|null $permissions
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $expires_at
  * @property string|null $last_used_at
  * @property string|null $refreshed_at
- * @property-read \App\Models\User $user
  * @method static \Illuminate\Database\Eloquent\Builder|JwtToken newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|JwtToken newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|JwtToken query()
@@ -197,7 +195,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Order newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Order newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Order query()
- * @method static \Illuminate\Database\Eloquent\Builder|Order uuid(array|string $value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order uuid(string $value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereAddress($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereAmount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereCreatedAt($value)
@@ -223,13 +221,11 @@ namespace App\Models{
  * @property string $title
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Order[] $orders
- * @property-read int|null $orders_count
  * @method static \Database\Factories\OrderStatusFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderStatus newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderStatus newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|OrderStatus query()
- * @method static \Illuminate\Database\Eloquent\Builder|OrderStatus uuid(array|string $value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderStatus uuid(string $value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderStatus whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderStatus whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderStatus whereTitle($value)
@@ -254,7 +250,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Payment newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Payment newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Payment query()
- * @method static \Illuminate\Database\Eloquent\Builder|Payment uuid(array|string $value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Payment uuid(string $value)
  * @method static \Illuminate\Database\Eloquent\Builder|Payment whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Payment whereDetails($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Payment whereId($value)
@@ -263,6 +259,35 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Payment whereUuid($value)
  */
 	class Payment extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\Post
+ *
+ * @property int $id
+ * @property string $uuid
+ * @property string $title
+ * @property string $slug
+ * @property string $content
+ * @property array $metadata
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Database\Factories\PostFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|Post newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Post newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Post query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Post uuid(string $value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Post whereContent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Post whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Post whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Post whereMetadata($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Post whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Post whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Post whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Post whereUuid($value)
+ */
+	class Post extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -285,7 +310,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Product newQuery()
  * @method static \Illuminate\Database\Query\Builder|Product onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|Product query()
- * @method static \Illuminate\Database\Eloquent\Builder|Product uuid(array|string $value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Product uuid(string $value)
  * @method static \Illuminate\Database\Eloquent\Builder|Product whereCategoryUuid($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Product whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Product whereDeletedAt($value)
@@ -300,6 +325,33 @@ namespace App\Models{
  * @method static \Illuminate\Database\Query\Builder|Product withoutTrashed()
  */
 	class Product extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\Promotion
+ *
+ * @property int $id
+ * @property string $uuid
+ * @property string $title
+ * @property string $content
+ * @property array $metadata
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Database\Factories\PromotionFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|Promotion newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Promotion newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Promotion query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Promotion uuid(string $value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Promotion whereContent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Promotion whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Promotion whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Promotion whereMetadata($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Promotion whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Promotion whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Promotion whereUuid($value)
+ */
+	class Promotion extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -329,13 +381,11 @@ namespace App\Models{
  * @property-read int|null $orders_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Payment[] $payments
  * @property-read int|null $payments_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\Laravel\Sanctum\PersonalAccessToken[] $tokens
- * @property-read int|null $tokens_count
  * @method static \Database\Factories\UserFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User query()
- * @method static \Illuminate\Database\Eloquent\Builder|User uuid(array|string $value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User uuid(string $value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereAddress($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereAvatar($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereCreatedAt($value)

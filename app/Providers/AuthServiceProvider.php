@@ -28,9 +28,13 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-//        Auth::viaRequest('jwt', function (Request $request) {
-//            $jwt_guard = new JwtAuthGuard($request->bearerToken());
-//            return $jwt_guard->getUserFromToken();
-//        });
+        Auth::viaRequest('jwt', function (Request $request) {
+            if ($request->bearerToken()) {
+                $jwt_guard = new JwtAuthGuard($request->bearerToken());
+                return $jwt_guard->getUserFromToken();
+            }
+
+            return null;
+        });
     }
 }

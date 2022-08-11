@@ -5,8 +5,8 @@ use App\Models\User;
 use Illuminate\Http\UploadedFile;
 use App\Models\File;
 
-test('user can upload an image', function () {
-    $user = User::factory()->create();
+test('admin can upload an image', function () {
+    $user = User::factory()->isAdmin()->create();
     $token = $user->createToken()->plainTextToken;
 
     $file = UploadedFile::fake()->image('payment-receipt.png');
@@ -32,8 +32,8 @@ test('user can upload an image', function () {
 });
 
 
-test('user cannot upload a pdf', function () {
-    $user = User::factory()->create();
+test('admin cannot upload a pdf', function () {
+    $user = User::factory()->isAdmin()->create();
     $token = $user->createToken()->plainTextToken;
 
     $file = UploadedFile::fake()->create('payment-receipt.pdf');

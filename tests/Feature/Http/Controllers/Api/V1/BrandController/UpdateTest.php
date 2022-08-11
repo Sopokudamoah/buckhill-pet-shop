@@ -3,8 +3,8 @@
 use App\Models\Brand;
 use App\Models\User;
 
-test('user can update brand', function () {
-    $user = User::factory()->create();
+test('admin can update brand', function () {
+    $user = User::factory()->isAdmin()->create();
     $token = $user->createToken()->plainTextToken;
 
     $brand = Brand::factory()->create();
@@ -33,8 +33,8 @@ test('user can update brand', function () {
 });
 
 
-test('user cannot update brand with invalid requirements', function () {
-    $user = User::factory()->create();
+test('admin cannot update brand with invalid requirements', function () {
+    $user = User::factory()->isAdmin()->create();
     $token = $user->createToken()->plainTextToken;
 
     $brand = Brand::factory()->create(['title'=> '']);

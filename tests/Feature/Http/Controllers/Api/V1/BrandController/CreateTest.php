@@ -3,8 +3,8 @@
 use App\Models\Brand;
 use App\Models\User;
 
-test('user can create brand', function () {
-    $user = User::factory()->create();
+test('admin can create brand', function () {
+    $user = User::factory()->isAdmin()->create();
     $token = $user->createToken()->plainTextToken;
 
     $brand = Brand::factory()->make();
@@ -22,8 +22,8 @@ test('user can create brand', function () {
 });
 
 
-test('user cannot create brand with invalid requirements', function () {
-    $user = User::factory()->create();
+test('admin cannot create brand with invalid requirements', function () {
+    $user = User::factory()->isAdmin()->create();
     $token = $user->createToken()->plainTextToken;
 
     $brand = Brand::factory()->make(['title' => '']);

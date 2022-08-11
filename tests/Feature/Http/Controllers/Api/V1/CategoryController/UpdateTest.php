@@ -3,8 +3,8 @@
 use App\Models\Category;
 use App\Models\User;
 
-test('user can update category', function () {
-    $user = User::factory()->create();
+test('admin can update category', function () {
+    $user = User::factory()->isAdmin()->create();
     $token = $user->createToken()->plainTextToken;
 
     $brand = Category::factory()->create();
@@ -33,8 +33,8 @@ test('user can update category', function () {
 });
 
 
-test('user cannot update category with invalid requirements', function () {
-    $user = User::factory()->create();
+test('admin cannot update category with invalid requirements', function () {
+    $user = User::factory()->isAdmin()->create();
     $token = $user->createToken()->plainTextToken;
 
     $brand = Category::factory()->create(['title'=> '']);

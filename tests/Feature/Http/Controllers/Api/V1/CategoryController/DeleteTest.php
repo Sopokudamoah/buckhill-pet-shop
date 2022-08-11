@@ -3,8 +3,8 @@
 use App\Models\Category;
 use App\Models\User;
 
-test('user can delete category', function () {
-    $user = User::factory()->create();
+test('admin can delete category', function () {
+    $user = User::factory()->isAdmin()->create();
 
     $token = $user->createToken()->plainTextToken;
 
@@ -19,8 +19,8 @@ test('user can delete category', function () {
 //    Storage::drive('responses')->put('delete-category-200.json', $response->content());
 });
 
-test('user cannot delete category if uuid is invalid', function () {
-    $user = User::factory()->create();
+test('admin cannot delete category if uuid is invalid', function () {
+    $user = User::factory()->isAdmin()->create();
 
     $token = $user->createToken()->plainTextToken;
 

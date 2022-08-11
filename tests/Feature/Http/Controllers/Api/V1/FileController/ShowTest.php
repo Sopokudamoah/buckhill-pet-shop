@@ -6,7 +6,7 @@ use Illuminate\Http\UploadedFile;
 use App\Models\File;
 
 test('user can view an image', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->isAdmin()->create();
     $token = $user->createToken()->plainTextToken;
 
     $file = UploadedFile::fake()->image('payment-receipt.png');
@@ -30,7 +30,7 @@ test('user can view an image', function () {
 
 
 test('user can download an image', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->isAdmin()->create();
     $token = $user->createToken()->plainTextToken;
 
     $file = UploadedFile::fake()->image('payment-receipt.png');

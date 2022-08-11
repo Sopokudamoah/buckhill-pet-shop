@@ -4,7 +4,7 @@ use App\Models\Category;
 use App\Models\User;
 
 test('user can create category', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->isAdmin()->create();
     $token = $user->createToken()->plainTextToken;
 
     $brand = Category::factory()->make();
@@ -22,8 +22,8 @@ test('user can create category', function () {
 });
 
 
-test('user cannot create category with invalid requirements', function () {
-    $user = User::factory()->create();
+test('admin cannot create category with invalid requirements', function () {
+    $user = User::factory()->isAdmin()->create();
     $token = $user->createToken()->plainTextToken;
 
     $brand = Category::factory()->make(['title' => '']);

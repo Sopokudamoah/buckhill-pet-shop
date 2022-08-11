@@ -3,8 +3,8 @@
 use App\Models\Brand;
 use App\Models\User;
 
-test('user can delete brand', function () {
-    $user = User::factory()->create();
+test('admin can delete brand', function () {
+    $user = User::factory()->isAdmin()->create();
 
     $token = $user->createToken()->plainTextToken;
 
@@ -19,8 +19,8 @@ test('user can delete brand', function () {
 //    Storage::drive('responses')->put('delete-brand-200.json', $response->content());
 });
 
-test('user cannot delete brand if uuid is invalid', function () {
-    $user = User::factory()->create();
+test('admin cannot delete brand if uuid is invalid', function () {
+    $user = User::factory()->isAdmin()->create();
 
     $token = $user->createToken()->plainTextToken;
 

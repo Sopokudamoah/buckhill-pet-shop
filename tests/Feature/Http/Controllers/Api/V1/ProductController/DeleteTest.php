@@ -4,8 +4,8 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\User;
 
-test('user can delete product', function () {
-    $user = User::factory()->create();
+test('admin can delete product', function () {
+    $user = User::factory()->isAdmin()->create();
 
     $token = $user->createToken()->plainTextToken;
 
@@ -21,7 +21,7 @@ test('user can delete product', function () {
 });
 
 test('user cannot delete product if uuid is invalid', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->isAdmin()->create();
 
     $token = $user->createToken()->plainTextToken;
 

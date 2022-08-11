@@ -5,8 +5,8 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\User;
 
-test('user can update product', function () {
-    $user = User::factory()->create();
+test('admin can update product', function () {
+    $user = User::factory()->isAdmin()->create();
     $token = $user->createToken()->plainTextToken;
 
     $brand = Brand::factory()->create();
@@ -45,8 +45,8 @@ test('user can update product', function () {
 });
 
 
-test('user cannot create product with invalid requirements', function () {
-    $user = User::factory()->create();
+test('admin cannot create product with invalid requirements', function () {
+    $user = User::factory()->isAdmin()->create();
     $token = $user->createToken()->plainTextToken;
 
     $uuid = fake()->uuid;

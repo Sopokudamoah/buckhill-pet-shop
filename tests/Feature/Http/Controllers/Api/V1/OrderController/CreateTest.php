@@ -21,7 +21,7 @@ test('user cannot create order with invalid requirements', function () {
     $user = User::factory()->create();
     $token = $user->createToken()->plainTextToken;
 
-    $order = Order::factory()->for($user)->make();
+    $order = Order::factory()->for($user)->make(['address' => null]);
 
     $response = apiTest()->withToken($token)->post(route('api.v1.order.create'), $order->toArray());
 

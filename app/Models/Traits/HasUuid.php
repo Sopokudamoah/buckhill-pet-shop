@@ -52,18 +52,12 @@ trait HasUuid
 
     /**
      * @param Builder $builder
-     * @param array|string $value
+     * @param string $value
      * @return void
      */
-    public function scopeUuid(Builder $builder, array|string $value)
+    public function scopeUuid(Builder $builder, string $value)
     {
         $column = "{$this->getTable()}.{$this->uuid_column}";
-        if (is_array($value)) {
-            $builder->whereIn($column, $value);
-        }
-
-        if (is_string($value)) {
-            $builder->where($column, '=', $value);
-        }
+        $builder->where($column, '=', $value);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Middleware\AdminMiddleware;
 use App\Http\Requests\Product\V1\CreateProductRequest;
 use App\Http\Requests\Product\V1\UpdateProductRequest;
 use App\Http\Resources\V1\ProductResource;
@@ -17,6 +18,11 @@ use Spatie\QueryBuilder\QueryBuilder;
  */
 class ProductController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(AdminMiddleware::class)->except(['index', 'show']);
+    }
+
     /**
      * List all products
      *

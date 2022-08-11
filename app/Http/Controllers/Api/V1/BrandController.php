@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Middleware\AdminMiddleware;
 use App\Http\Requests\Brand\V1\CreateBrandRequest;
 use App\Http\Requests\Brand\V1\UpdateBrandRequest;
 use App\Http\Resources\V1\BrandResource;
@@ -17,6 +18,10 @@ use Spatie\QueryBuilder\QueryBuilder;
  */
 class BrandController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(AdminMiddleware::class)->except(['index', 'show']);
+    }
     /**
      * List all brands
      *

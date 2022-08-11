@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Middleware\AdminMiddleware;
 use App\Http\Requests\Category\V1\CreateCategoryRequest;
 use App\Http\Requests\Category\V1\UpdateCategoryRequest;
 use App\Http\Resources\V1\CategoryResource;
@@ -17,6 +18,11 @@ use Spatie\QueryBuilder\QueryBuilder;
  */
 class CategoryController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(AdminMiddleware::class)->except(['index', 'show']);
+    }
+
     /**
      * List all categories
      *

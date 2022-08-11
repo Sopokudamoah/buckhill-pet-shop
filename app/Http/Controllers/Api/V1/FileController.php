@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Middleware\AdminMiddleware;
 use App\Http\Requests\File\V1\FileUploadRequest;
 use App\Http\Resources\V1\BaseApiResource;
 use App\Models\File;
@@ -17,6 +18,12 @@ use Illuminate\Support\Facades\Storage;
  */
 class FileController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(AdminMiddleware::class)->except(['show']);
+    }
+
+
     /**
      * Upload file
      *

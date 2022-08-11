@@ -2,11 +2,14 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Foundation\Console\KeyGenerateCommand;
-use Illuminate\Support\Str;
+use Illuminate\Console\Command;
 
-class GenerateJWTSecret extends KeyGenerateCommand
+use Illuminate\Console\ConfirmableTrait;
+
+class GenerateJWTSecret extends Command
 {
+    use ConfirmableTrait;
+
     /**
      * The name and signature of the console command.
      *
@@ -22,18 +25,13 @@ class GenerateJWTSecret extends KeyGenerateCommand
      */
     protected $description = 'Generate a new secret key for JWT implementation';
 
-    protected string $env_key = 'JWT_SECRET';
-
     /**
-     * @return int|void
+     * @return int
      */
     public function handle()
     {
-        $key = Str::random(64);
-
-
-        if (! $this->setKeyInEnvironmentFile($key)) {
-            return;
+        if ((!$this->confirmToProceed())) {
+            return 0;
         }
 
         $this->generateKeyPairs();
@@ -41,48 +39,6 @@ class GenerateJWTSecret extends KeyGenerateCommand
         $this->components->info('JWT secret key set successfully.');
 
         return 0;
-    }
-
-    /**
-     * @return string
-     */
-    protected function keyReplacementPattern()
-    {
-        $escaped = preg_quote('='.$this->laravel['config']['jwt.secret'], '/');
-
-        return "/^$this->env_key{$escaped}/m";
-    }
-
-    /**
-     * Set the application key in the environment file.
-     *
-     * @param  string  $key
-     * @return bool
-     */
-    protected function setKeyInEnvironmentFile($key)
-    {
-        $currentKey = $this->laravel['config']['jwt.secret'];
-
-        if (strlen($currentKey) !== 0 && (! $this->confirmToProceed())) {
-            return false;
-        }
-
-        $this->writeNewEnvironmentFileWith($key);
-
-        return true;
-    }
-
-    /**
-     * @param $key
-     * @return void
-     */
-    protected function writeNewEnvironmentFileWith($key)
-    {
-        file_put_contents($this->laravel->environmentFilePath(), preg_replace(
-            $this->keyReplacementPattern(),
-            "{$this->env_key}={$key}",
-            file_get_contents($this->laravel->environmentFilePath())
-        ));
     }
 
     private function generateKeyPairs()

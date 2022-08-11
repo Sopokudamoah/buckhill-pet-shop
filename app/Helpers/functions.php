@@ -1,22 +1,22 @@
 <?php
 
 
-use Firebase\JWT\ExpiredException;
+use Carbon\Carbon;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
-use Firebase\JWT\SignatureInvalidException;
 
 /**
  * @param array $payload
- * @param string $algo
+ * @param string|null $algo
+ * @param Carbon|null $expiresAt
  * @return string
  */
-function jwt_encode(array $payload, string $algo = 'HS256')
+function jwt_encode(array $payload, Carbon $expiresAt = null, string $algo = null)
 {
     $now = now();
     $domain_name = request()->getSchemeAndHttpHost();
 
-    $expire_at = $now->addSeconds(config('jwt.expiration'));
+    $expire_at = $expiresAt ?? now()->addSeconds(config('jwt.expiration'));
 
     $predefined_data = [
         'iss' => $domain_name,
@@ -26,16 +26,19 @@ function jwt_encode(array $payload, string $algo = 'HS256')
         'exp' => $expire_at->getTimestamp(),
     ];
 
-    return JWT::encode(array_merge($payload, $predefined_data), config('jwt.secret'), $algo);
+    $private_key = @file_get_contents(config('jwt.private_key_path'));
+
+    return JWT::encode(array_merge($predefined_data, $payload), $private_key, $algo ?? config('jwt.algo'));
 }
 
 /**
  * @param string $jwt
- * @param string $algo
+ * @param string|null $algo
  * @return array
- * @throws SignatureInvalidException|ExpiredException
  */
-function jwt_decode(string $jwt, string $algo = 'HS256')
+function jwt_decode(string $jwt, string $algo = null)
 {
-    return (array) JWT::decode($jwt, new Key(config('jwt.secret'), $algo));
+    $public_key = @file_get_contents(config('jwt.public_key_path'));
+
+    return (array) JWT::decode($jwt, new Key($public_key, $algo ?? config('jwt.algo')));
 }

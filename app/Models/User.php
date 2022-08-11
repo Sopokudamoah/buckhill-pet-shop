@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Guards\JwtAuthGuard;
+use App\Helpers\AccessToken;
 use App\Models\Traits\HasUuid;
 use App\Notifications\SendPasswordResetToken;
+use Carbon\Carbon;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -12,15 +14,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
-use Laravel\Sanctum\HasApiTokens;
-use Laravel\Sanctum\NewAccessToken;
 
 class User extends Authenticatable
 {
     use HasFactory;
     use Notifiable;
     use HasUuid;
-    use HasApiTokens;
 
     /**
      * The attributes that are mass assignable.
@@ -60,7 +59,7 @@ class User extends Authenticatable
 
     public function jwtTokens()
     {
-        return $this->hasMany(JwtToken::class);
+        return $this->hasMany(JwtToken::class, 'user_id');
     }
 
     protected function fullName(): Attribute
@@ -72,14 +71,32 @@ class User extends Authenticatable
 
     public function createToken(string $name = null, array $abilities = ['*'], DateTimeInterface $expiresAt = null)
     {
-        $token = $this->tokens()->create([
-            'name' => $this->fullName,
-            'token' => hash('sha256', $plainTextToken = Str::random(40)),
-            'abilities' => $abilities,
-            'expires_at' => $expiresAt,
+        $unique_id = hash('sha256', Str::random(40));
+
+        $expiresAt = Carbon::parse($expiresAt ?? now()->addSeconds(config('jwt.expiration')));
+
+        $token = $this->jwtTokens()->create([
+            'token_title' => $name ?? $this->fullName,
+            'unique_id' => $unique_id,
+            'permissions' => $abilities,
+            'expires_at' => $expiresAt->format('Y-m-d H:i:s'),
         ]);
 
-        return new NewAccessToken($token, $token->getKey() . '|' . $plainTextToken);
+        $payload = [
+            'unique_id' => $unique_id,
+            JwtAuthGuard::$user_key => $this->uuid,
+            JwtAuthGuard::$token_key => $token->id
+        ];
+
+        $jwt = jwt_encode($payload, $expiresAt);
+
+        return new AccessToken($jwt);
+    }
+
+    public function currentAccessToken()
+    {
+        $payload = jwt_decode(request()->bearerToken());
+        return $this->jwtTokens()->find($payload['token_id']);
     }
 
 
@@ -97,6 +114,8 @@ class User extends Authenticatable
 
     public function payments()
     {
-        return $this->hasManyThrough(Payment::class, Order::class, 'user_id', 'id', null, 'payment_id')->select(['payments.*']);
+        return $this->hasManyThrough(Payment::class, Order::class, 'user_id', 'id', null, 'payment_id')->select(
+            ['payments.*']
+        );
     }
 }

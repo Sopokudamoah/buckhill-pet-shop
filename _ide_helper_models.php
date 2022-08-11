@@ -179,7 +179,7 @@ namespace App\Models{
  * @property int $id
  * @property int $user_id
  * @property int $order_status_id
- * @property int $payment_id
+ * @property int|null $payment_id
  * @property string $uuid
  * @property array $products
  * @property float|null $delivery_fee
@@ -189,7 +189,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\OrderStatus $orderStatus
- * @property-read \App\Models\Payment $payment
+ * @property-read \App\Models\Payment|null $payment
  * @property-read \App\Models\User $user
  * @method static \Database\Factories\OrderFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Order newModelQuery()

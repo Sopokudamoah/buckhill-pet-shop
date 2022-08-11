@@ -36,7 +36,7 @@ class ProductController extends Controller
         $products = QueryBuilder::for(Product::query()->join('categories', 'categories.uuid', '=', 'category_uuid'))
             ->select(['products.title', 'products.uuid', 'category_uuid', 'description', 'metadata'])
             ->allowedFilters(['title', 'uuid', 'category_uuid'])
-            ->simplePaginate($request->get('per_page', 15));
+            ->simplePaginate($request->get('limit', 15));
 
 
         return (new ProductResource())->resource($products);

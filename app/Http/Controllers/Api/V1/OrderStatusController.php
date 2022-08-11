@@ -34,7 +34,7 @@ class OrderStatusController extends Controller
     {
         $order_statuses = QueryBuilder::for(OrderStatus::query())
             ->allowedFilters(['title'])
-            ->simplePaginate($request->get('per_page', 15));
+            ->simplePaginate($request->get('limit', 15));
 
         return (new BaseApiResource())->resource($order_statuses);
     }

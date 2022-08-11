@@ -37,7 +37,7 @@ class OrderController extends Controller
     {
         $orders = QueryBuilder::for(Order::query())
             ->allowedFilters(['delivery_fee', 'address', 'products', 'uuid', 'payment_id', 'order_status_id'])
-            ->simplePaginate($request->get('per_page', 15));
+            ->simplePaginate($request->get('limit', 15));
 
 
         return (new OrderResource())->resource($orders);

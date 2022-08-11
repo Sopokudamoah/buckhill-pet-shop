@@ -35,7 +35,7 @@ class BrandController extends Controller
         $products = QueryBuilder::for(Brand::query())
             ->select(['title', 'uuid', 'slug'])
             ->allowedFilters(['title', 'uuid', 'slug'])
-            ->simplePaginate($request->get('per_page', 15));
+            ->simplePaginate($request->get('limit', 15));
 
 
         return (new BrandResource())->resource($products);

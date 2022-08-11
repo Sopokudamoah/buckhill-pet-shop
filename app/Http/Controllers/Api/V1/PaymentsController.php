@@ -34,7 +34,7 @@ class PaymentsController extends Controller
     {
         $payments = QueryBuilder::for(Payment::query())
             ->allowedFilters(['details', 'uuid', 'type'])
-            ->simplePaginate($request->get('per_page', 15));
+            ->simplePaginate($request->get('limit', 15));
 
         return (new BaseApiResource())->resource($payments);
     }

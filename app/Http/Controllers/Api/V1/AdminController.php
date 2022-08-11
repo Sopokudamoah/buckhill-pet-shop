@@ -111,7 +111,7 @@ class AdminController extends Controller
         $users = QueryBuilder::for(User::query())
             ->select(['first_name', 'last_name', 'email', 'avatar', 'phone_number', 'id'])
             ->allowedFilters(['first_name', 'last_name','email', 'phone_number'])
-            ->simplePaginate($request->get('per_page', 15));
+            ->simplePaginate($request->get('limit', 15));
 
         return (new UserResource())->resource($users);
     }

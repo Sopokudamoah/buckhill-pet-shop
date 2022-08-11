@@ -26,7 +26,7 @@ class UserListingRequest extends FormRequest
     {
         return [
             'page' => 'sometimes|int',
-            'per_page' => 'sometimes|int',
+            'limit' => 'sometimes|int',
             'filter.first_name' => 'string',
             'filter.last_name' => 'string',
             'filter.email' => 'string',
@@ -46,7 +46,7 @@ class UserListingRequest extends FormRequest
                 'description' => 'The page number',
                 'example' => 1
             ],
-            'per_page' => [
+            'limit' => [
                 'description' => 'Number of resources per page',
                 'example' => 15
             ],

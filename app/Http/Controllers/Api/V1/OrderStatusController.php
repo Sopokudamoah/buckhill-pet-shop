@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Requests\OrderStatus\V1\CreateOrderStatusRequest;
+use App\Http\Requests\OrderStatus\V1\UpdateOrderStatusRequest;
 use App\Http\Resources\V1\BaseApiResource;
 use App\Models\OrderStatus;
 use Illuminate\Http\Request;
@@ -65,7 +66,7 @@ class OrderStatusController extends Controller
      *
      * @responseFile status=200 storage/responses/update-order-status-200.json
      */
-    public function update(CreateOrderStatusRequest $request, OrderStatus $order_status)
+    public function update(UpdateOrderStatusRequest $request, OrderStatus $order_status)
     {
         $data = $request->validated();
 

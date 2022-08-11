@@ -28,7 +28,14 @@ class UpdateOrderStatusRequest extends FormRequest
         /** @var OrderStatus $order_status */
         $order_status = $this->route('order_status');
         return [
-            'title' => ['required', 'string', Rule::unique('order_statuses', 'title')->ignoreModel($order_status)]
+            'title' => [
+                'required',
+                'string',
+                Rule::unique('order_statuses', 'title')
+                    ->when(!empty($order_status), function ($q) use ($order_status) {
+                        $q->ignoreModel($order_status);
+                    })
+            ]
         ];
     }
 }

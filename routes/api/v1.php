@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\V1\OrderStatusController;
 use App\Http\Controllers\Api\V1\PaymentsController;
 use App\Http\Controllers\Api\V1\ProductController;
 use App\Http\Controllers\Api\V1\UserController;
+use App\Http\Controllers\MainPageController;
 use App\Http\Middleware\AdminMiddleware;
 use Illuminate\Support\Facades\Route;
 
@@ -127,4 +128,12 @@ Route::middleware(['auth:api'])->name('order-status.')->controller(OrderStatusCo
     });
 
     Route::get('order-statuses', 'index')->name('index');
+});
+
+
+//Main page endpoint
+Route::name('main.')->prefix('main')->controller(MainPageController::class)->group(function () {
+    Route::get('blog', 'blog')->name('blog');
+    Route::get('blog/{post}', 'showBlog')->name('show-blog');
+    Route::get('promotions', 'promotions')->name('promotions');
 });
